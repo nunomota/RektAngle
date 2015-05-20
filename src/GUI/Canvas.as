@@ -1,21 +1,13 @@
 ﻿package GUI {
 	
-	public class Canvas {
-		
-		public function Canvas() {
-			
-		}
-		
-		//used to add a new image to the ones being tracked
-		public function draw():void {
-			
-		}
-		
-		//used to clear every image currently being tracked
-		public function clear():void {
-			
-		}
+	import flash.display.DisplayObjectContainer;
+	import flash.display.Bitmap;
+	
+	public class Canvas extends DisplayObjectContainer {
 
+		public static function addImage(image:Bitmap):void {
+			this.addChild(image);
+		}
 	}
 	
 }
