@@ -19,7 +19,7 @@
 		//used for variable initialization
 		private function init():void {
 
-			debug = new Debug();
+			debug = new Debug(3);
 			debug.toggle();
 			
 			canvas = new Canvas();
