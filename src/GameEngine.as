@@ -3,7 +3,6 @@
 	import flash.display.MovieClip;
 	import Debug.*;
 	import GUI.*;
-	import GUI.Auxiliary.ImageRequest;
 	import Algorithm.Level;
 	
 	public class GameEngine extends MovieClip {
@@ -30,17 +29,18 @@
 		private function setup():void {
 			debug.print("Setup started", 0);
 			
-			level = new Level();
-			level.addTexture(new ImageRequest("../Resources/Textures/Menus/Buttons/Account.png", 100, 100));
-			level.addTexture(new ImageRequest("../Resources/Textures/Menus/Buttons/Back.png", 200, 200));
+			level = new Level(this);
+			level.addTexture("../Resources/Textures/Menus/Buttons/Account.png");
+			level.addTexture("../Resources/Textures/Menus/Buttons/Back.png");
 			level.build();
+			level.instantiate("Back", 100, 100);
 			
 			debug.print("Setup ended", 0);
 		}
 		
 		//used for this class' main loop
 		private function start():void {
-			debug.print("Game strated running", 0);
+			debug.print("Game started running", 0);
 			//TODO main loop code
 			level.update();
 			debug.print("Game finished running", 0);
