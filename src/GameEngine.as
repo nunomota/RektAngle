@@ -40,7 +40,7 @@
 		
 		//used for this class' main loop
 		private function start():void {
-			debug.print("Game strated running", 0);
+			debug.print("Game started running", 0);
 			//TODO main loop code
 			level.update();
 			debug.print("Game finished running", 0);
