@@ -26,7 +26,7 @@
 		//used to draw a texture in a certain position
 		public function instantiate(imageName:String, posX:int, posY:int):void {
 			if (canvas.draw(imageName, posX, posY) != 0) {
-				GameEngine.debug.print("Could not draw texture '".concat(imageName, "' (it was either not loaded or there is a typo in its name)"), 1);
+				GameEngine.debug.print("Could not draw texture '".concat(imageName, "' (it was either not added to the assets or there is a typo in its name)"), 1);
 			}
 		}
 		
