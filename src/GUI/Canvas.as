@@ -79,6 +79,8 @@
 		private function doneLoading(event:Event):void {
 			var loader:ImageLoader = getLoaderFromEvent(event);
 			var imageContainer:ImageContainer = new ImageContainer(loader.targetPath, Bitmap(loader.content));
+			imageContainer.image.width *= SCALE_FACTOR;
+			imageContainer.image.height *= SCALE_FACTOR;
 			imagesLoaded[imagesLoaded.length] = imageContainer;
 			removeListeners(loader);
 			GameEngine.debug.print("Image finished loading: ".concat(imageContainer.name), 0);
