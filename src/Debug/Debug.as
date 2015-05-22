@@ -8,7 +8,7 @@
 		
 		public function Debug(filter:int) {
 			isEnabled = false;
-			debugTags = new Array("", "[Warning]", "[Error]");
+			debugTags = new Array("", "[Event]", "[Warning]", "[Error]");
 			messageFilter = filter;
 		}
 		
@@ -18,7 +18,7 @@
 		}
 
 		//function used to print strings if debugging is enabled
-		//0 - regular message; 1 - warning message; 2 - error message
+		//0 - regular message; 1 - event messages; 2 - warning message; 3 - error message
 		public function print(message:String, type:int):void {
 			if (isEnabled && (messageFilter == type || messageFilter == debugTags.length)) {
 				trace(debugTags[type].concat(" ", message));

@@ -29,7 +29,7 @@
 		//used for variable initialization
 		private function init():void {
 
-			debug = new Debug(3);
+			debug = new Debug(4);
 			debug.toggle();
 			eventHandler = new EventHandler();
 		}

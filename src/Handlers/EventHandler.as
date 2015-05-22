@@ -31,7 +31,7 @@
 		public function setMouseClick(event:MouseEvent):void {
 			mouseClicked = true;
 			mouseClickPos = new Vector2D(event.localX, event.localY);
-			GameEngine.debug.print("Mouse click at ".concat(mouseClickPos.toString()), 0);
+			GameEngine.debug.print("Mouse click at ".concat(mouseClickPos.toString()), 1);
 		}
 		
 		//function called by every Level to know a mouse click's position
@@ -48,7 +48,7 @@
 		public function setKeyDown(event:KeyboardEvent):void {
 			var keyCode:int = event.charCode;
 			if (isKeyValid(keyCode)) {
-				GameEngine.debug.print("Key '".concat(String.fromCharCode(event.charCode), "' was pressed"), 0);
+				GameEngine.debug.print("Key '".concat(String.fromCharCode(event.charCode), "' was pressed"), 1);
 				keyPressed[keyCode-aCode] = true;
 			}
 		}

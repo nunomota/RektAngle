@@ -33,7 +33,7 @@
 		public function instantiate(imageName:String, position:Vector2D):Image2D {
 			var image:Image2D;
 			if ((image = canvas.draw(imageName, position)) == null) {
-				GameEngine.debug.print("Could not draw texture '".concat(imageName, "' (it was either not added to the assets or there is a typo in its name)"), 1);
+				GameEngine.debug.print("Could not draw texture '".concat(imageName, "' (it was either not added to the assets or there is a typo in its name)"), 2);
 			}
 			return image;
 		}
