@@ -7,7 +7,7 @@
 	import GUI.Auxiliary.*;
 	import flash.display.LoaderInfo;
 
-	public class Canvas {
+	public class CanvasHandler {
 		
 		private static var SCALE_FACTOR:int = 3;
 		private var gameEngine:GameEngine;
@@ -17,7 +17,7 @@
 		private var imagesLoaded:Array;
 		private var imagesToLoad:int;
 		
-		public function Canvas(engine:GameEngine) {
+		public function CanvasHandler(engine:GameEngine) {
 			gameEngine = engine;
 			imagesLoaded = new Array();
 		}

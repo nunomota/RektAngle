@@ -1,13 +1,13 @@
 ﻿package Algorithm {
-	import GUI.Canvas;
+	import GUI.CanvasHandler;
 	
 	public class Level {
 
-		private var canvas:Canvas;
+		private var canvas:CanvasHandler;
 		private var imageRequests:Array;
 		
 		public function Level(engine:GameEngine) {
-			canvas = new Canvas(engine);
+			canvas = new CanvasHandler(engine);
 			GameEngine.debug.print("Created new Canvas: ".concat(canvas.toString()), 0);
 			imageRequests = new Array();
 		}
