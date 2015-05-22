@@ -6,13 +6,14 @@
 	
 	import GUI.Auxiliary.*;
 	import flash.display.LoaderInfo;
+	import GUI.Objects.Image2D;
+	import GUI.Objects.Auxiliary.Vector2D;
 
 	public class CanvasHandler {
 		
 		private static var SCALE_FACTOR:int = 3;
 		private var gameEngine:GameEngine;
-		public static var width:int = 768;
-		public static var height:int = 672;
+		public var dimensions:Vector2D = new Vector2D(768, 672);
 		
 		private var imagesLoaded:Array;
 		private var imagesToLoad:int;
@@ -41,18 +42,18 @@
 		}
 		
 		//used to draw a texture on the screen
-		public function draw(imageName:String, posX:int, posY:int):int {
+		public function draw(imageName:String, position:Vector2D):Image2D {
 			var image:Bitmap = getImageFromAssets(imageName);
 			if (image != null) {
 				image = new Bitmap(image.bitmapData.clone());
 				gameEngine.stage.addChild(image);
-				image.x = posX;
-				image.y = posY;
+				image.x = position.x;
+				image.y = position.y;
 				image.width *= SCALE_FACTOR;
 				image.height *= SCALE_FACTOR;
-				return 0;
+				return (new Image2D(image, position));
 			}
-			return -1;
+			return null;
 		}
 		
 		//used to search for a image in the canvas' available assets
@@ -116,7 +117,7 @@
 		
 		//function used foor debugginf purposes
 		public function toString():String {
-			return "".concat("(", width, ",", height, ") ", imagesLoaded.length, " assets loaded");
+			return "".concat(dimensions.toString(), " ", imagesLoaded.length, " assets loaded");
 		}
 
 	}

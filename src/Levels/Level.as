@@ -1,10 +1,12 @@
 ﻿package Levels {
 	
 	import GUI.CanvasHandler;
+	import GUI.Objects.Auxiliary.Vector2D;
+	import GUI.Objects.Image2D;
 	
 	public class Level {
 
-		private var canvas:CanvasHandler;
+		protected var canvas:CanvasHandler;
 		private var imageRequests:Array;
 		
 		protected var assetsLoaded:Boolean = false;
@@ -28,10 +30,12 @@
 		}
 		
 		//used to draw a texture in a certain position
-		public function instantiate(imageName:String, posX:int, posY:int):void {
-			if (canvas.draw(imageName, posX, posY) != 0) {
+		public function instantiate(imageName:String, position:Vector2D):Image2D {
+			var image:Image2D;
+			if ((image = canvas.draw(imageName, position)) == null) {
 				GameEngine.debug.print("Could not draw texture '".concat(imageName, "' (it was either not added to the assets or there is a typo in its name)"), 1);
 			}
+			return image;
 		}
 		
 		//used by child Objects to populate the Level's assets
