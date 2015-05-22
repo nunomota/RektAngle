@@ -30,8 +30,6 @@
 			for (i = 0; i < requests.length; i++) {
 				getImageFromUrl(requests[i]);
 			}
-			//GameEngine.debug.print("Waitting for all textures to load", 0);
-			//TODO really wait for all textures to load
 		}
 		
 		//creates a custom Loader for a specific image
@@ -93,15 +91,26 @@
 			removeListeners(loader);
 		}
 		
+		//retrieves an ImageLoader object from an event
 		private function getLoaderFromEvent(event:Event):ImageLoader {
 			var loaderInfo:LoaderInfo = LoaderInfo(event.target);
 			var loader:ImageLoader = ImageLoader(loaderInfo.loader);
 			return loader;
 		}
 		
+		//removes all the listeners previously added to the ImageLoader
 		private function removeListeners(loader:ImageLoader):void {
 			loader.contentLoaderInfo.removeEventListener(Event.COMPLETE,doneLoading);
 			loader.contentLoaderInfo.removeEventListener(IOErrorEvent.IO_ERROR,loadingError);
+		}
+		
+		//checks if all the Assets were already loaded
+		public function assetsLoaded():Boolean {
+			var assetsLoaded:Boolean = false;
+			if (imagesLoaded.length == imagesToLoad) {
+				assetsLoaded = true;
+			}
+			return assetsLoaded;
 		}
 		
 		//function used foor debugginf purposes

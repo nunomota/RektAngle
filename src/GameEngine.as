@@ -1,9 +1,12 @@
 ﻿package  {
 
 	import flash.display.MovieClip;
+	import flash.events.*;
+	
 	import Debug.*;
 	import GUI.*;
-	import Algorithm.Level;
+	import Levels.*;
+	import Levels.Templates.*;
 	
 	public class GameEngine extends MovieClip {
 
@@ -14,7 +17,8 @@
 
 			init();
 			setup();
-			start();
+			
+			this.addEventListener(Event.ENTER_FRAME, update);
 		}
 
 		//used for variable initialization
@@ -29,21 +33,18 @@
 		private function setup():void {
 			debug.print("Setup started", 0);
 			
-			level = new Level(this);
-			level.addTexture("../Resources/Textures/Menus/Buttons/Account.png");
-			level.addTexture("../Resources/Textures/Menus/Buttons/Back.png");
-			level.build();
-			level.instantiate("Back", 100, 100);
+			level = new MainMenu(this);
 			
 			debug.print("Setup ended", 0);
 		}
 		
 		//used for this class' main loop
-		private function start():void {
-			debug.print("Game started running", 0);
+		private function update(event:Event):void {
+			//debug.print("Game started running", 0);
 			//TODO main loop code
+			debug.print("Main loop running", 0);
 			level.update();
-			debug.print("Game finished running", 0);
+			//debug.print("Game finished running", 0);
 		}
 
 	}
