@@ -2,7 +2,7 @@
 	
 	import Levels.*;
 	import GUI.Objects.Auxiliary.Vector2D;
-	import GUI.Objects.Image2D;
+	import GUI.Objects.*;
 	
 	public class MainMenu extends Level {
 

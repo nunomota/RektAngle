@@ -7,10 +7,13 @@
 	import GUI.*;
 	import Levels.*;
 	import Levels.Templates.*;
+	import Handlers.EventHandler;
 	
 	public class GameEngine extends MovieClip {
 
 		public static var debug:Debug;
+		private var eventHandler:EventHandler;
+		
 		private var level:Level;
 
 		public function GameEngine() {
@@ -18,6 +21,7 @@
 			init();
 			setup();
 			
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, eventHandler.setKeyDown);
 			this.addEventListener(Event.ENTER_FRAME, update);
 		}
 
@@ -26,7 +30,7 @@
 
 			debug = new Debug(3);
 			debug.toggle();
-	
+			eventHandler = new EventHandler();
 		}
 
 		//used for populating canvas, etc

@@ -1,6 +1,10 @@
 ﻿package GUI.Objects {
 	import flash.display.Bitmap;
+	import flash.events.*;
+	
 	import GUI.Objects.Auxiliary.Vector2D;
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
 	
 	public class Image2D {
 		private var imageData:Bitmap;
@@ -10,7 +14,7 @@
 			this.imageData = data;
 			this.position = pos;
 			
-			centerImage();centralizePosition(pos);
+			centerImage();
 		}
 		
 		//used to change the default top-left anchor of an image to a centered one
