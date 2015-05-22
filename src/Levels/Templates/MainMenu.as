@@ -21,6 +21,7 @@
 			super.start();
 			instantiate("Back", 100, 100);
 			instantiate("Account", 200, 200);
+			instantiate("Back", 300, 300);
 		}
 		
 		//level's main loop

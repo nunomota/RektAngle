@@ -44,9 +44,12 @@
 		public function draw(imageName:String, posX:int, posY:int):int {
 			var image:Bitmap = getImageFromAssets(imageName);
 			if (image != null) {
+				image = new Bitmap(image.bitmapData.clone());
 				gameEngine.stage.addChild(image);
 				image.x = posX;
 				image.y = posY;
+				image.width *= SCALE_FACTOR;
+				image.height *= SCALE_FACTOR;
 				return 0;
 			}
 			return -1;
@@ -77,8 +80,6 @@
 		private function doneLoading(event:Event):void {
 			var loader:ImageLoader = getLoaderFromEvent(event);
 			var imageContainer:ImageContainer = new ImageContainer(loader.targetPath, Bitmap(loader.content));
-			imageContainer.image.width *= SCALE_FACTOR;
-			imageContainer.image.height *= SCALE_FACTOR;
 			imagesLoaded[imagesLoaded.length] = imageContainer;
 			removeListeners(loader);
 			GameEngine.debug.print("Image finished loading: ".concat(imageContainer.name), 0);

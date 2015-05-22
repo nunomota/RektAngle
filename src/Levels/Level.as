@@ -41,7 +41,7 @@
 		
 		//functioned called once, right after all assets are loaded
 		protected function start():void {
-			GameEngine.debug.print("Start method running for level", 0);
+			GameEngine.debug.print("'Start' method running for level", 0);
 		}
 		
 		//level's main loop
