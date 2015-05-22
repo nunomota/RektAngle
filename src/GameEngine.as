@@ -22,6 +22,7 @@
 			setup();
 			
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, eventHandler.setKeyDown);
+			stage.addEventListener(MouseEvent.CLICK, eventHandler.setMouseClick);
 			this.addEventListener(Event.ENTER_FRAME, update);
 		}
 
