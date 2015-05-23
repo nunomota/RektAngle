@@ -9,6 +9,8 @@
 	public class Image2D {
 		private var imageData:Bitmap;
 		private var position:Vector2D;
+		
+		private var wasClicked:Boolean = false;
 
 		public function Image2D(data:Bitmap, pos:Vector2D) {
 			this.imageData = data;
@@ -27,6 +29,16 @@
 		//used to convert the coordinates of the image
 		private function centralizePosition(oldPosition:Vector2D):Vector2D {
 			return (new Vector2D(oldPosition.x - imageData.width/2, oldPosition.y - imageData.height/2));
+		}
+		
+		public function setMouseClick():void {
+			wasClicked = true;
+		}
+		
+		public function getMouseClick():Boolean {
+			var temp:Boolean = wasClicked;
+			wasClicked = false;
+			return temp;
 		}
 		
 		/*--------------------------------------
@@ -58,6 +70,14 @@
 		
 		public function getPosition():Vector2D {
 			return (new Vector2D(getX(), getY()));
+		}
+		
+		public function getWidth():int {
+			return this.imageData.width;
+		}
+		
+		public function getHeight():int {
+			return this.imageData.height;
 		}
 	}
 	

@@ -12,7 +12,7 @@
 	public class GameEngine extends MovieClip {
 
 		public static var debug:Debug;
-		private var eventHandler:EventHandler;
+		public var eventHandler:EventHandler;
 		
 		private var level:Level;
 
