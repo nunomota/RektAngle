@@ -9,15 +9,19 @@
 		private var gameEngine:GameEngine;
 		
 		protected var canvas:CanvasHandler;
+		private var imagesDrawn:Array;
 		private var imageRequests:Array;
 		
 		protected var assetsLoaded:Boolean = false;
 		
 		private var buttons:Array;
 		
+		private var isShwoing:Boolean = false;
+		
 		public function Level(engine:GameEngine) {
 			gameEngine = engine;
 			canvas = new CanvasHandler(engine);
+			imagesDrawn = new Array();
 			GameEngine.debug.print("Created new Canvas: ".concat(canvas.toString()), 0);
 			imageRequests = new Array();
 			buttons = new Array();
@@ -40,6 +44,8 @@
 			var image:Image2D;
 			if ((image = canvas.draw(imageName, position)) == null) {
 				GameEngine.debug.print("Could not draw texture '".concat(imageName, "' (it was either not added to the assets or there is a typo in its name)"), 2);
+			} else {
+				imagesDrawn[imagesDrawn.length] = image;
 			}
 			return image;
 		}
@@ -55,15 +61,16 @@
 		}
 		
 		//level's main loop
-		public function update():void {
+		public function update():int {
 			if (!assetsLoaded) {
 				if ((assetsLoaded = canvas.assetsLoaded()) == true) {
-					GameEngine.debug.print("Assets finished loading", 0);
+					GameEngine.debug.print("All assets are loaded", 0);
 					start();
+					show();
 				}
-				return;
 			}
 			checkButtonClick();
+			return 0;
 		}
 		
 		//used by child classes to create a button from an image
@@ -85,14 +92,31 @@
 					var botLimit:int = button.getPosition().y+button.getHeight()/2;
 					var topLimit:int = button.getPosition().y-button.getHeight()/2;
 					if (mouseClick.x <= rightLimit && mouseClick.x >= leftLimit && mouseClick.y >= topLimit && mouseClick.y <= botLimit) {
+						GameEngine.debug.print("'".concat(button.getName(), "' button was clicked"), 1);
 						button.setMouseClick();
 					}
 				}
 			}
 		}
 		
+		//used to add every texture to the screen
+		private function show():void {
+			var i:int;
+			GameEngine.debug.print("Drawing ".concat(imagesDrawn.length, " menu textures"), 0);
+			for (i = 0; i < imagesDrawn.length; i++) {
+				gameEngine.stage.addChild(imagesDrawn[i].getData());
+			}
+		}
+		
 		//used to clear every asset of the level from the screen
-		public function cleanUp():void {
+		public function hide():void {
+			assetsLoaded = false;
+			imagesDrawn.length = 0;
+			buttons.length = 0;
+			cleanUp();
+		}
+		
+		private function cleanUp():void {
 			canvas.clear();
 		}
 

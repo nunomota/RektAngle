@@ -46,12 +46,14 @@
 			var image:Bitmap = getImageFromAssets(imageName);
 			if (image != null) {
 				image = new Bitmap(image.bitmapData.clone());
-				gameEngine.stage.addChild(image);
+				//gameEngine.stage.addChild(image);
 				image.x = position.x;
 				image.y = position.y;
 				image.width *= SCALE_FACTOR;
 				image.height *= SCALE_FACTOR;
-				return (new Image2D(image, position));
+				var newImage:Image2D = new Image2D(image, position);
+				newImage.setName(imageName);
+				return newImage;
 			}
 			return null;
 		}
@@ -71,9 +73,10 @@
 		
 		//used to clear every image currently being tracked
 		public function clear():void {
-			GameEngine.debug.print("Removing all child objects of stage", 0);
-			while(gameEngine.stage.numChildren > 0) {
-				gameEngine.stage.removeChildAt(0);
+			GameEngine.debug.print("Removing ".concat(gameEngine.stage.numChildren-1, " child object(s) of stage"), 0);
+			while(gameEngine.stage.numChildren > 1) {
+				gameEngine.stage.removeChildAt(1);
+				GameEngine.debug.print("One removed", 0);
 			}
 		}
 		

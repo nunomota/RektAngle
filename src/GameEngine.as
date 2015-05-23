@@ -13,8 +13,7 @@
 
 		public static var debug:Debug;
 		public var eventHandler:EventHandler;
-		
-		private var level:Level;
+		private var navigator:Navigator;
 
 		public function GameEngine() {
 
@@ -32,22 +31,19 @@
 			debug = new Debug(4);
 			debug.toggle();
 			eventHandler = new EventHandler();
+			navigator = new Navigator(this);
 		}
 
-		//used for populating canvas, etc
+		//used for value attribution
 		private function setup():void {
 			debug.print("Setup started", 0);
-			
-			level = new MainMenu(this);
 			
 			debug.print("Setup ended", 0);
 		}
 		
 		//used for this class' main loop
 		private function update(event:Event):void {
-			//TODO main loop code
-			//debug.print("Main loop running", 0);
-			level.update();
+			navigator.update();
 		}
 
 	}

@@ -45,6 +45,7 @@
 			topBorder.setPosition(new Vector2D(topBorder.getPosition().x, topBorder.getPosition().y + topBorder.getHeight()/2));
 			botBorder = instantiate("Bottom", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y));
 			botBorder.setPosition(new Vector2D(botBorder.getPosition().x, botBorder.getPosition().y - botBorder.getHeight()/2));
+			
 			playButton = instantiate("Play", new Vector2D(canvas.dimensions.x/2, 5*canvas.dimensions.y/16));
 			accountButton = instantiate("Account", new Vector2D(canvas.dimensions.x/2, 7*canvas.dimensions.y/16));
 			optionsButton = instantiate("Options", new Vector2D(canvas.dimensions.x/2, 9*canvas.dimensions.y/16));
@@ -59,19 +60,15 @@
 		}
 		
 		//level's main loop
-		public override function update():void {
+		public override function update():int {
 			super.update();
-			if (!assetsLoaded) {return;}
+			if (!assetsLoaded) {return 0;}
 			
 			if (playButton.getMouseClick()) {
-				GameEngine.debug.print("Play button was clicked", 1);
-			} else if (accountButton.getMouseClick()) {
-				GameEngine.debug.print("Account button was clicked", 1);
-			} else if (optionsButton.getMouseClick()) {
-				GameEngine.debug.print("Options button was clicked", 1);
-			} else if (helpButton.getMouseClick()) {
-				GameEngine.debug.print("Help button was clicked", 1);
+				return 1;
 			}
+			
+			return 0;
 		}
 
 	}
