@@ -24,8 +24,6 @@
 		private var corebg1:Image2D;
 		private var corebg2:Image2D;
 		
-		//private var greenRay:Image2D;
-		
 		private var nPlayers:int = 1;
 		private var ROT_SPEED:int = 5;
 		
@@ -33,6 +31,8 @@
 		
 		private var player1Stats:PlayerStats;
 		private var player2Stats:PlayerStats;
+		private var player1ScoreDisplay:Array;
+		private var player2ScoreDisplay:Array;
 		
 		private var abilities:Array;
 		
@@ -56,10 +56,16 @@
 			addTexture("../Resources/Textures/InGame/Active/Corebg1.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
 			addTexture("../Resources/Textures/InGame/Active/GreenRay.png");
+			var i:int;
+			for (i = 0; i < 10; i++) {
+				addTexture("../Resources/Textures/InGame/Numbers/".concat(i, ".png"));
+			}
 			buildAssets();
 			
 			player1Stats = new PlayerStats();
 			player2Stats = new PlayerStats();
+			player1ScoreDisplay = new Array();
+			player2ScoreDisplay = new Array();
 			
 			abilities = new Array();
 			abilities[0] = new Ability("GreenRay", 50, 50);
@@ -91,11 +97,13 @@
 			playerSymbol1 = instantiate("Player_1_symbol", new Vector2D(canvas.dimensions.x, 0));
 			var offset:Vector2D = new Vector2D(playerSymbol1.getWidth()/10, playerSymbol1.getHeight()/10);
 			playerSymbol1.setPosition(new Vector2D(playerSymbol1.getPosition().x - playerSymbol1.getWidth()/2 - offset.x, playerSymbol1.getPosition().y + playerSymbol1.getHeight()/2 + offset.y));
+			updateScore(1);
 			if (nPlayers == 2) {
 				player2 = instantiate("Player_2", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 				player2.rotate(180);
 				playerSymbol2 = instantiate("Player_2_symbol", new Vector2D(0, canvas.dimensions.y));
 				playerSymbol2.setPosition(new Vector2D(playerSymbol2.getPosition().x + playerSymbol2.getWidth()/2 + offset.x, playerSymbol2.getPosition().y - playerSymbol2.getHeight()/2 - offset.y));
+				updateScore(2);
 			}
 		}
 		
@@ -178,16 +186,9 @@
 		}
 		
 		private function useAbility(player:int, ability:int):void {
-			var targetPlayer:Image2D;
-			var targetStats:PlayerStats;
+			var targetPlayer:Image2D = getPlayer(player);
+			var targetStats:PlayerStats = getPlayerStats(player);
 			var targetAbility:Ability = abilities[ability-1];
-			if (player == 1) {
-				targetPlayer = player1;
-				targetStats = player1Stats;
-			} else {
-				targetPlayer = player2;
-				targetStats = player2Stats;
-			}
 			
 			if (targetStats.spendEnergy(targetAbility.cost) == 0) {
 				GameEngine.debug.print("Player using ability ".concat(ability), 0);
@@ -197,24 +198,6 @@
 			} else {
 				GameEngine.debug.print("Not enough energy to use ability [".concat(targetStats.energy, " available]"), 0);
 			}
-		
-			/*
-			switch (ability) {
-				case 1:
-					GameEngine.debug.print("Player using ability 1", 0);
-					var ability:Ability = instantiate("GreenRay", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
-					greenRay.rotate(player.getData().rotation);
-					destroy(greenRay, 1);
-					break;
-				case 2:
-					GameEngine.debug.print("Player using ability 2", 0);
-					break;
-				case 3:
-					GameEngine.debug.print("Player using ability 3", 0);
-					break;
-				default:
-					break;
-			}*/
 		}
 
 		//function to set number of players
@@ -225,6 +208,72 @@
 			} else if (nPlayers <= 0) {
 				nPlayers = 1;
 			}
+		}
+		
+		private function updateScore(player:int):void {
+			GameEngine.debug.print("Updating Player ".concat(player, " score"), 0);
+			var targetPlayer:Image2D = getPlayer(player);
+			var targetStats:PlayerStats = getPlayerStats(player);
+			var targetDisplay:Array = getDisplay(player);
+			
+			var score:String = targetStats.score.toString();
+			var targetPosition:Vector2D;
+			clearDisplay(targetDisplay);
+			if (player == 1) {
+				targetPosition = new Vector2D(playerSymbol1.getPosition().x - playerSymbol1.getWidth()/2, playerSymbol1.getPosition().y);
+				var i:int;
+				for (i = 0; i < score.length; i++) {
+					targetDisplay[i] = instantiate(score.charAt(score.length-1-i), targetPosition);
+					targetDisplay[i].setPosition(new Vector2D(targetPosition.x - targetDisplay[i].getWidth(), targetPosition.y));
+				}
+			} else {
+				targetPosition = new Vector2D(playerSymbol2.getPosition().x + playerSymbol2.getWidth()/2, playerSymbol2.getPosition().y);
+				var j:int;
+				for (j = 0; j < score.length; j++) {
+					targetDisplay[j] = instantiate(score.charAt(j), targetPosition);
+					targetDisplay[j].setPosition(new Vector2D(targetPosition.x + targetDisplay[j].getWidth(), targetPosition.y));
+				}
+			}
+		}
+		
+		//used to update both the points of the player and its display on screen
+		private function addPoints(player:int, points:int):void {
+			var targetStats:PlayerStats = getPlayerStats(player);
+			targetStats.addPoints(points);
+			updateScore(player);
+		}
+		
+		//used to clear a score display
+		private function clearDisplay(array:Array):void {
+			var i:int;
+			for (i = 0; i < array.length; i++) {
+				destroy(array[i], 0);
+			}
+			array.length = 0;
+		}
+		
+		//retrieves a Image2D reference for a player
+		private function getPlayer(player:int):Image2D {
+			if (player == 1) {
+				return player1;
+			} 
+			return player2;
+		}
+		
+		//retrieves PlayerStats for a player
+		private function getPlayerStats(player:int):PlayerStats {
+			if (player == 1) {
+				return player1Stats;
+			}
+			return player2Stats;
+		}
+		
+		//retrieves the score display for a player
+		private function getDisplay(player:int):Array {
+			if (player == 1) {
+				return player1ScoreDisplay;
+			}
+			return player2ScoreDisplay;
 		}
 	}
 	
