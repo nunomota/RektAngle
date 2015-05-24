@@ -9,6 +9,7 @@
 		private var curLevel:Level;
 		private var mainMenu:Level;
 		private var playMenu:Level;
+		private var rankingMenu:Level;
 		private var accountMenu:Level;
 		private var optionsMenu:Level;
 		private var helpMenu:Level;
@@ -26,6 +27,7 @@
 		private function init():void {
 			mainMenu = new MainMenu(gameEngine);
 			playMenu = new PlayMenu(gameEngine);
+			rankingMenu = new RankingMenu(gameEngine);
 			accountMenu = new AccountMenu(gameEngine);
 			optionsMenu = new OptionsMenu(gameEngine);
 			helpMenu = new HelpMenu(gameEngine);
@@ -72,6 +74,9 @@
 						case 2:
 							changeLevel(gameLevel);
 							gameLevel.setPlayerNumber(2);
+							break;
+						case 3:
+							changeLevel(rankingMenu);
 							break;
 						default:
 							break;
