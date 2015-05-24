@@ -8,6 +8,7 @@
 
 		private var background:Image2D;
 		private var topBorder:Image2D;
+		private var title:Image2D;
 		private var botBorder:Image2D;
 		private var playButton:Image2D;
 		private var accountButton:Image2D;
@@ -26,6 +27,7 @@
 			
 			addTexture("../Resources/Textures/Menus/Background.png");
 			addTexture("../Resources/Textures/Menus/Borders/Top.png");
+			addTexture("../Resources/Textures/Menus/Titles/MainTitle.png");
 			addTexture("../Resources/Textures/Menus/Borders/Bottom.png");
 			addTexture("../Resources/Textures/Menus/Buttons/Play.png");
 			addTexture("../Resources/Textures/Menus/Buttons/Account.png");
@@ -43,6 +45,7 @@
 			background = instantiate("Background", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 			topBorder = instantiate("Top", new Vector2D(canvas.dimensions.x/2, 0));
 			topBorder.setPosition(new Vector2D(topBorder.getPosition().x, topBorder.getPosition().y + topBorder.getHeight()/2));
+			title = instantiate("MainTitle", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/16));
 			botBorder = instantiate("Bottom", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y));
 			botBorder.setPosition(new Vector2D(botBorder.getPosition().x, botBorder.getPosition().y - botBorder.getHeight()/2));
 			
@@ -66,6 +69,12 @@
 			
 			if (playButton.getMouseClick()) {
 				return 1;
+			} else if (accountButton.getMouseClick()) {
+				return 2;
+			} else if (optionsButton.getMouseClick()) {
+				return 3;
+			} else if (helpButton.getMouseClick()) {
+				return 4;
 			}
 			
 			return 0;

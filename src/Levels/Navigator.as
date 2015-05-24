@@ -9,6 +9,9 @@
 		private var curLevel:Level;
 		private var mainMenu:Level;
 		private var playMenu:Level;
+		private var accountMenu:Level;
+		private var optionsMenu:Level;
+		private var helpMenu:Level;
 		
 		private var curLevelBehaviour:int;
 		
@@ -22,6 +25,9 @@
 		private function init():void {
 			mainMenu = new MainMenu(gameEngine);
 			playMenu = new PlayMenu(gameEngine);
+			accountMenu = new AccountMenu(gameEngine);
+			optionsMenu = new OptionsMenu(gameEngine);
+			helpMenu = new HelpMenu(gameEngine);
 		}
 		
 		//used for value attribution
@@ -42,6 +48,15 @@
 					switch(curLevelBehaviour) {
 						case 1:
 							changeLevel(playMenu);
+							break;
+						case 2:
+							changeLevel(accountMenu);
+							break;
+						case 3:
+							changeLevel(optionsMenu);
+							break;
+						case 4:
+							changeLevel(helpMenu);
 							break;
 						default:
 							break;
