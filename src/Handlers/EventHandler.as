@@ -1,20 +1,20 @@
 ﻿package Handlers {
 	
 	import flash.events.*;
+	import flash.ui.Keyboard;
+	
 	import GUI.Objects.Auxiliary.Vector2D;
 	
 	public class EventHandler {
 
+		private var specialKeys:Array;
 		private var keyPressed:Array;
 		private var mouseClicked:Boolean;
 		private var mouseClickPos:Vector2D;
 		
-		private var aCode:int = "a".charCodeAt();
-		private var zCode:int = "z".charCodeAt();
-		private var jumpCode:int = " ".charCodeAt();
-		
 		public function EventHandler() {
-			keyPressed = new Array(27);
+			specialKeys = new Array(Keyboard.SPACE, Keyboard.ESCAPE, Keyboard.LEFT, Keyboard.RIGHT);
+			keyPressed = new Array(26+specialKeys.length);
 			setupArray();
 		}
 
@@ -46,41 +46,60 @@
 		
 		//function called when a keyboard event is fired
 		public function setKeyDown(event:KeyboardEvent):void {
-			var keyCode:int = event.charCode;
-			if (isKeyValid(keyCode)) {
+			var keyCode:uint = event.keyCode;
+			var index:int = getKeyIndex(keyCode);
+			if (index != -1) {
 				GameEngine.debug.print("Key '".concat(String.fromCharCode(event.charCode), "' was pressed"), 1);
-				keyPressed[keyCode-aCode] = true;
+				keyPressed[index] = true;
+			}
+		}
+		
+		//function called when a keyboard event is fired
+		public function setKeyUp(event:KeyboardEvent):void {
+			var keyCode:uint = event.keyCode;
+			var index:int = getKeyIndex(keyCode);
+			if (index != -1) {
+				GameEngine.debug.print("Key '".concat(String.fromCharCode(event.charCode), "' was released"), 1);
+				keyPressed[index] = false;
 			}
 		}
 		
 		//function that should be called by every Level to check for key presses
-		public function getKeyDown(key:String):Boolean {
+		public function getKeyDown(keyCode:uint):Boolean {
 			var wasPressed:Boolean = false;
-			var keyCode:int = key.charCodeAt();
-			var specialIndex:int;
+			var index:int = getKeyIndex(keyCode);
 			
-			if (isKeyValid(keyCode)) {
-				wasPressed = keyPressed[keyCode-aCode];
-				keyPressed[keyCode-aCode] = false;
-			} else if ((specialIndex = isSpecialKey(keyCode)+zCode) > zCode) {
-				wasPressed = keyPressed[specialIndex];
-				keyPressed[specialIndex] = false;
+			if (index != -1) {
+				wasPressed = keyPressed[index];
 			}
 			return wasPressed;
 		}
 		
+		private function getKeyIndex(keyCode:uint):int {
+			var specialIndex:uint;
+			if (isKeyValid(keyCode)) {
+				return (keyCode-Keyboard.A);
+			} else if ((specialIndex = isSpecialKey(keyCode)+(Keyboard.Z-Keyboard.A)) > (Keyboard.Z-Keyboard.A)) {
+				return specialIndex;
+			}
+			return -1;
+		}
+		
 		//function meant to check wether the key is to be tracked or not
-		private function isKeyValid(keyCode:int):Boolean {
-			if (keyCode == jumpCode || (keyCode <= zCode && keyCode >= aCode)) {
+		private function isKeyValid(keyCode:uint):Boolean {
+			if (keyCode <= Keyboard.Z && keyCode >= Keyboard.A) {
 				return true;
 			}
 			return false;
 		}
 		
 		//function meant to check for speacial keys, like 'spacebar' or 'esc'
-		private function isSpecialKey(keyCode:int):int {
-			if (keyCode == jumpCode) {
-				return 1;
+		private function isSpecialKey(keyCode:uint):int {
+			var i:int;
+			for (i = 0; i < specialKeys.length; i++) {
+				if (keyCode == specialKeys[i]) {
+					return i+1;
+				}
 			}
 			return 0;
 		}

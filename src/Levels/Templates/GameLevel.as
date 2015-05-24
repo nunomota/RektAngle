@@ -3,9 +3,14 @@
 	import Levels.*;
 	import GUI.Objects.Auxiliary.Vector2D;
 	import GUI.Objects.*;
+	import Handlers.Controls.*;
+	
+	import flash.ui.Keyboard;
 	
 	public class GameLevel extends Level {
 
+		private var gameEngine:GameEngine;
+		
 		private var background:Image2D;
 		private var topBorder:Image2D;
 		private var botBorder:Image2D;
@@ -16,9 +21,11 @@
 		private var core:Image2D;
 		
 		private var nPlayers:int = 1;
+		private var ROT_SPEED:int = 20;
 		
 		public function GameLevel(engine:GameEngine) {
 			super(engine);
+			this.gameEngine = engine;
 		}
 		
 		//used to populate the Level's assets
@@ -65,7 +72,31 @@
 			super.update();
 			if (!assetsLoaded) {return 0;}
 			
+			movePlayers();
 			return 0;
+		}
+		
+		private function movePlayers():void {
+			if (nPlayers == 1) {
+				if (gameEngine.eventHandler.getKeyDown(PlayerControls.singlePlayer.left)) {
+					player1.rotate(-ROT_SPEED);
+				} else if (gameEngine.eventHandler.getKeyDown(PlayerControls.singlePlayer.right)) {
+					player1.rotate(ROT_SPEED);
+				}
+			} else {
+				//Move Player1
+				if (gameEngine.eventHandler.getKeyDown(PlayerControls.multiPlayer1.left)) {
+					player1.rotate(-ROT_SPEED);
+				} else if (gameEngine.eventHandler.getKeyDown(PlayerControls.multiPlayer1.right)) {
+					player1.rotate(ROT_SPEED);
+				}
+				//Move player2
+				if (gameEngine.eventHandler.getKeyDown(PlayerControls.multiPlayer2.left)) {
+					player2.rotate(-ROT_SPEED);
+				} else if (gameEngine.eventHandler.getKeyDown(PlayerControls.multiPlayer2.right)) {
+					player2.rotate(ROT_SPEED);
+				}
+			}
 		}
 
 		//function to set number of players

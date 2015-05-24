@@ -2,6 +2,7 @@
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.events.*;
+	import flash.geom.Rectangle;
 	
 	import GUI.Objects.Auxiliary.Vector2D;
 	import flash.display.DisplayObject;
@@ -14,6 +15,8 @@
 		public var name:String = "";
 		
 		private var wasClicked:Boolean = false;
+		
+		private var lastRotation:Number = 190;
 
 		public function Image2D(data:Bitmap, pos:Vector2D) {
 			this.imageData = data;
@@ -36,15 +39,24 @@
 		
 		//used to rotate the image
 		public function rotate(angleDeg:Number):void {
-			//TODO make all calculations with double precision (using verctor2D makes them integer)
-			var angleRad:Number = angleDeg * Math.PI/180
-			var radius:Number = Math.sqrt(Math.pow(imageData.width/2, 2) + Math.pow(imageData.height/2, 2));
-			var oldPosition:Vector2D = new Vector2D(radius*Math.cos(Math.PI/4), radius*Math.sin(Math.PI/4));
-			var newPosition:Vector2D = new Vector2D(radius*Math.cos(angleRad+Math.PI/4), radius*Math.sin(angleRad+Math.PI/4));
-			GameEngine.debug.print("Moving ".concat(oldPosition.x - newPosition.x, " to the right and ", oldPosition.y - newPosition.y, " to the top"), 0);
-			imageData.rotation = angleDeg;
-			imageData.x += oldPosition.x - newPosition.x;
-			imageData.y += oldPosition.y - newPosition.y;
+			var matrix:Matrix = imageData.transform.matrix;
+			var rect:Rectangle = imageData.getBounds(imageData.parent);
+
+			matrix.translate(-(rect.left + (rect.width / 2)), -(rect.top + (rect.height / 2)));
+			matrix.rotate((angleDeg / 180) * Math.PI);
+			matrix.translate(rect.left + (rect.width / 2), rect.top + (rect.height / 2));
+			imageData.transform.matrix = matrix;
+
+			imageData.rotation = Math.round(imageData.rotation);
+			if (imageData.rotation == 0) {
+				GameEngine.debug.print("Calibrating Position", 0);
+				imageData.x = this.position.x - imageData.width/2;
+				imageData.y = this.position.y - imageData.height/2;
+			} else if (imageData.rotation == 180 || imageData.rotation == -180) {
+				GameEngine.debug.print("Calibrating Position", 0);
+				imageData.x = this.position.x + imageData.width/2;
+				imageData.y = this.position.y + imageData.height/2;
+			}
 		}
 		
 		/*--------------------------------------

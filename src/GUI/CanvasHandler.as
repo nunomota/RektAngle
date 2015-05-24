@@ -76,7 +76,6 @@
 			GameEngine.debug.print("Removing ".concat(gameEngine.stage.numChildren-1, " child object(s) of stage"), 0);
 			while(gameEngine.stage.numChildren > 1) {
 				gameEngine.stage.removeChildAt(1);
-				GameEngine.debug.print("One removed", 0);
 			}
 		}
 		
