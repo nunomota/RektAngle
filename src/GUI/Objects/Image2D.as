@@ -35,13 +35,16 @@
 		}
 		
 		//used to rotate the image
-		public function rotate(angleRad:Number):void {
-			var matrixImage:BitmapData = new BitmapData(imageData.width, imageData.height, true, 0x00000000);
-			var rotationMatrix:Matrix = new Matrix();
-			rotationMatrix.rotate(angleRad);
-			rotationMatrix.translate(imageData.width, imageData.height);	//TODO find out how this works
-			matrixImage.draw(imageData.bitmapData, rotationMatrix);
-			imageData.bitmapData = matrixImage;
+		public function rotate(angleDeg:Number):void {
+			//TODO make all calculations with double precision (using verctor2D makes them integer)
+			var angleRad:Number = angleDeg * Math.PI/180
+			var radius:Number = Math.sqrt(Math.pow(imageData.width/2, 2) + Math.pow(imageData.height/2, 2));
+			var oldPosition:Vector2D = new Vector2D(radius*Math.cos(Math.PI/4), radius*Math.sin(Math.PI/4));
+			var newPosition:Vector2D = new Vector2D(radius*Math.cos(angleRad+Math.PI/4), radius*Math.sin(angleRad+Math.PI/4));
+			GameEngine.debug.print("Moving ".concat(oldPosition.x - newPosition.x, " to the right and ", oldPosition.y - newPosition.y, " to the top"), 0);
+			imageData.rotation = angleDeg;
+			imageData.x += oldPosition.x - newPosition.x;
+			imageData.y += oldPosition.y - newPosition.y;
 		}
 		
 		/*--------------------------------------
