@@ -13,7 +13,7 @@
 		private var mouseClickPos:Vector2D;
 		
 		public function EventHandler() {
-			specialKeys = new Array(Keyboard.SPACE, Keyboard.ESCAPE, Keyboard.LEFT, Keyboard.RIGHT);
+			specialKeys = new Array(Keyboard.SPACE, Keyboard.ESCAPE, Keyboard.LEFT, Keyboard.RIGHT, Keyboard.DOWN, Keyboard.UP, Keyboard.COMMA, Keyboard.PERIOD);
 			keyPressed = new Array(26+specialKeys.length);
 			setupArray();
 		}

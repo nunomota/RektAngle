@@ -38,7 +38,7 @@
 		}
 		
 		//used to rotate the image
-		public function rotate(angleDeg:Number):void {
+		public function rotate(angleDeg:Number, mode:int = 1):void {
 			var matrix:Matrix = imageData.transform.matrix;
 			var rect:Rectangle = imageData.getBounds(imageData.parent);
 
@@ -48,14 +48,16 @@
 			imageData.transform.matrix = matrix;
 
 			imageData.rotation = Math.round(imageData.rotation);
-			if (imageData.rotation == 0) {
-				GameEngine.debug.print("Calibrating Position", 0);
-				imageData.x = this.position.x - imageData.width/2;
-				imageData.y = this.position.y - imageData.height/2;
-			} else if (imageData.rotation == 180 || imageData.rotation == -180) {
-				GameEngine.debug.print("Calibrating Position", 0);
-				imageData.x = this.position.x + imageData.width/2;
-				imageData.y = this.position.y + imageData.height/2;
+			if (mode == 1) {
+				if (imageData.rotation == 0) {
+					GameEngine.debug.print("Calibrating Position", 0);
+					imageData.x = this.position.x - imageData.width/2;
+					imageData.y = this.position.y - imageData.height/2;
+				} else if (imageData.rotation == 180 || imageData.rotation == -180) {
+					GameEngine.debug.print("Calibrating Position", 0);
+					imageData.x = this.position.x + imageData.width/2;
+					imageData.y = this.position.y + imageData.height/2;
+				}
 			}
 		}
 		

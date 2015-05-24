@@ -3,6 +3,7 @@
 	import GUI.CanvasHandler;
 	import GUI.Objects.Auxiliary.Vector2D;
 	import GUI.Objects.Image2D;
+	import GUI.Objects.Disposable;
 	
 	public class Level {
 
@@ -15,8 +16,9 @@
 		protected var assetsLoaded:Boolean = false;
 		
 		private var buttons:Array;
+		private var disposables:Array;
 		
-		private var isShwoing:Boolean = false;
+		private var isShowing:Boolean = false;
 		
 		public function Level(engine:GameEngine) {
 			gameEngine = engine;
@@ -25,6 +27,7 @@
 			GameEngine.debug.print("Created new Canvas: ".concat(canvas.toString()), 0);
 			imageRequests = new Array();
 			buttons = new Array();
+			disposables = new Array();
 			setup();
 		}
 		
@@ -46,6 +49,9 @@
 				GameEngine.debug.print("Could not draw texture '".concat(imageName, "' (it was either not added to the assets or there is a typo in its name)"), 2);
 			} else {
 				imagesDrawn[imagesDrawn.length] = image;
+				if (isShowing) {
+					gameEngine.stage.addChild(image.getData());
+				}
 			}
 			return image;
 		}
@@ -70,6 +76,7 @@
 				}
 			}
 			checkButtonClick();
+			clearDisposables();
 			return 0;
 		}
 		
@@ -106,10 +113,12 @@
 			for (i = 0; i < imagesDrawn.length; i++) {
 				gameEngine.stage.addChild(imagesDrawn[i].getData());
 			}
+			isShowing = true;
 		}
 		
 		//used to clear every asset of the level from the screen
 		public function hide():void {
+			isShowing = false;
 			assetsLoaded = false;
 			imagesDrawn.length = 0;
 			buttons.length = 0;
@@ -118,6 +127,26 @@
 		
 		private function cleanUp():void {
 			canvas.clear();
+		}
+		
+		protected function destroy(image:Image2D, delay:Number):void {
+			var disposable:Disposable = new Disposable(image, delay);
+			GameEngine.debug.print("Disposing of object in ".concat(delay, " seconds"), 0);
+			disposables[disposables.length] = disposable;
+		}
+		
+		private function clearDisposables():void {
+			var i:int;
+			var newDisposables:Array = new Array();
+			for (i = 0; i < disposables.length; i++) {
+				if (disposables[i].isFinished()) {
+					GameEngine.debug.print("Image being disposed", 0);
+					gameEngine.stage.removeChild(disposables[i].image.getData());
+				} else {
+					newDisposables[newDisposables.length] = disposables[i];
+				}
+			}
+			disposables = newDisposables;
 		}
 
 	}
