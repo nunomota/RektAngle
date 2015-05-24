@@ -1,10 +1,12 @@
 ﻿package GUI.Objects {
 	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.events.*;
 	
 	import GUI.Objects.Auxiliary.Vector2D;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.geom.Matrix;
 	
 	public class Image2D {
 		private var imageData:Bitmap;
@@ -30,6 +32,16 @@
 		//used to convert the coordinates of the image
 		private function centralizePosition(oldPosition:Vector2D):Vector2D {
 			return (new Vector2D(oldPosition.x - imageData.width/2, oldPosition.y - imageData.height/2));
+		}
+		
+		//used to rotate the image
+		public function rotate(angleRad:Number):void {
+			var matrixImage:BitmapData = new BitmapData(imageData.width, imageData.height, true, 0x00000000);
+			var rotationMatrix:Matrix = new Matrix();
+			rotationMatrix.rotate(angleRad);
+			rotationMatrix.translate(imageData.width, imageData.height);	//TODO find out how this works
+			matrixImage.draw(imageData.bitmapData, rotationMatrix);
+			imageData.bitmapData = matrixImage;
 		}
 		
 		/*--------------------------------------

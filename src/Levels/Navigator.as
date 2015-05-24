@@ -12,6 +12,7 @@
 		private var accountMenu:Level;
 		private var optionsMenu:Level;
 		private var helpMenu:Level;
+		private var gameLevel:GameLevel;
 		
 		private var curLevelBehaviour:int;
 		
@@ -28,6 +29,7 @@
 			accountMenu = new AccountMenu(gameEngine);
 			optionsMenu = new OptionsMenu(gameEngine);
 			helpMenu = new HelpMenu(gameEngine);
+			gameLevel = new GameLevel(gameEngine);
 		}
 		
 		//used for value attribution
@@ -62,7 +64,18 @@
 							break;
 					}
 				} else if (curLevel == playMenu) {
-					
+					switch(curLevelBehaviour) {
+						case 1:
+							changeLevel(gameLevel);
+							gameLevel.setPlayerNumber(1);
+							break;
+						case 2:
+							changeLevel(gameLevel);
+							gameLevel.setPlayerNumber(2);
+							break;
+						default:
+							break;
+					}
 				}
 			}
 		}

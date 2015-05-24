@@ -71,6 +71,12 @@
 			
 			if (backButton.getMouseClick()) {
 				return -1;
+			} else if (singleButton.getMouseClick()) {
+				return 1;
+			} else if (coopButton.getMouseClick()) {
+				return 2;
+			} else if (rankingButton.getMouseClick()) {
+				return 3;
 			}
 			
 			return 0;
