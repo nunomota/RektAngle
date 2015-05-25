@@ -33,6 +33,8 @@
 		private var player2Stats:PlayerStats;
 		private var player1ScoreDisplay:Array;
 		private var player2ScoreDisplay:Array;
+		private var player1EnergyDisplay:Array;
+		private var player2EnergyDisplay:Array;
 		
 		private var abilities:Array;
 		
@@ -60,12 +62,15 @@
 			for (i = 0; i < 10; i++) {
 				addTexture("../Resources/Textures/InGame/Numbers/".concat(i, ".png"));
 			}
+			addTexture("../Resources/Textures/InGame/Numbers/Slash.png");
 			buildAssets();
 			
 			player1Stats = new PlayerStats();
 			player2Stats = new PlayerStats();
 			player1ScoreDisplay = new Array();
 			player2ScoreDisplay = new Array();
+			player1EnergyDisplay = new Array();
+			player2EnergyDisplay = new Array();
 			
 			abilities = new Array();
 			abilities[0] = new Ability("GreenRay", 50, 50);
@@ -97,13 +102,13 @@
 			playerSymbol1 = instantiate("Player_1_symbol", new Vector2D(canvas.dimensions.x, 0));
 			var offset:Vector2D = new Vector2D(playerSymbol1.getWidth()/10, playerSymbol1.getHeight()/10);
 			playerSymbol1.setPosition(new Vector2D(playerSymbol1.getPosition().x - playerSymbol1.getWidth()/2 - offset.x, playerSymbol1.getPosition().y + playerSymbol1.getHeight()/2 + offset.y));
-			updateScore(1);
+			updateDisplays(1);
 			if (nPlayers == 2) {
 				player2 = instantiate("Player_2", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 				player2.rotate(180);
 				playerSymbol2 = instantiate("Player_2_symbol", new Vector2D(0, canvas.dimensions.y));
 				playerSymbol2.setPosition(new Vector2D(playerSymbol2.getPosition().x + playerSymbol2.getWidth()/2 + offset.x, playerSymbol2.getPosition().y - playerSymbol2.getHeight()/2 - offset.y));
-				updateScore(2);
+				updateDisplays(2);
 			}
 		}
 		
@@ -120,7 +125,9 @@
 		private function playerUpdate():void {
 			movePlayers();
 			player1Stats.update();
+			updateEnergy(1);
 			player2Stats.update();
+			updateEnergy(2);
 			useAbilities();
 		}
 		
@@ -210,11 +217,16 @@
 			}
 		}
 		
+		private function updateDisplays(player:int):void {
+			updateScore(player);
+			updateEnergy(player);
+		}
+		
 		private function updateScore(player:int):void {
 			GameEngine.debug.print("Updating Player ".concat(player, " score"), 0);
 			var targetPlayer:Image2D = getPlayer(player);
 			var targetStats:PlayerStats = getPlayerStats(player);
-			var targetDisplay:Array = getDisplay(player);
+			var targetDisplay:Array = getScoreDisplay(player);
 			
 			var score:String = targetStats.score.toString();
 			var targetPosition:Vector2D;
@@ -232,6 +244,50 @@
 				for (j = 0; j < score.length; j++) {
 					targetDisplay[j] = instantiate(score.charAt(j), targetPosition);
 					targetDisplay[j].setPosition(new Vector2D(targetPosition.x + targetDisplay[j].getWidth(), targetPosition.y));
+				}
+			}
+		}
+		
+		private function updateEnergy(player:int):void {
+			var targetStats:PlayerStats = getPlayerStats(player);
+			var targetDisplay:Array = getEnergyDisplay(player);
+			
+			var energy:String = targetStats.energy.toString();
+			var targetPosition:Vector2D;
+			clearDisplay(targetDisplay);
+			if (player == 1) {
+				targetPosition = new Vector2D(canvas.dimensions.x/2, topBorder.getPosition().y - topBorder.getHeight()/3);
+				targetDisplay[0] = instantiate("0", targetPosition);
+				targetPosition = new Vector2D(7*targetDisplay[0].getWidth(), targetDisplay[0].getPosition().y);
+				targetDisplay[0].setPosition(targetPosition);
+				targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				targetDisplay[1] = instantiate("0", targetPosition);
+				targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				targetDisplay[2] = instantiate("1", targetPosition);
+				targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				targetDisplay[3] = instantiate("Slash", targetPosition);
+				targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				var j:int;
+				for (j = 0; j < energy.length; j++) {
+					targetDisplay[4+j] = instantiate(energy.charAt(energy.length-1-j), targetPosition);
+					targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				}
+			} else {
+				targetPosition = new Vector2D(canvas.dimensions.x/2, botBorder.getPosition().y + botBorder.getHeight()/3);
+				targetDisplay[0] = instantiate("0", targetPosition);
+				targetPosition = new Vector2D(canvas.dimensions.x - targetDisplay[0].getWidth(), targetDisplay[0].getPosition().y);
+				targetDisplay[0].setPosition(targetPosition);
+				targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				targetDisplay[1] = instantiate("0", targetPosition);
+				targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				targetDisplay[2] = instantiate("1", targetPosition);
+				targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				targetDisplay[3] = instantiate("Slash", targetPosition);
+				targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
+				var i:int;
+				for (i = 0; i < energy.length; i++) {
+					targetDisplay[4+i] = instantiate(energy.charAt(energy.length-1-i), targetPosition);
+					targetPosition = new Vector2D(targetPosition.x - targetDisplay[0].getWidth(), targetPosition.y);
 				}
 			}
 		}
@@ -269,11 +325,19 @@
 		}
 		
 		//retrieves the score display for a player
-		private function getDisplay(player:int):Array {
+		private function getScoreDisplay(player:int):Array {
 			if (player == 1) {
 				return player1ScoreDisplay;
 			}
 			return player2ScoreDisplay;
+		}
+		
+		//retrieves the energy display for a player
+		private function getEnergyDisplay(player:int):Array {
+			if (player == 1) {
+				return player1EnergyDisplay;
+			}
+			return player2EnergyDisplay;
 		}
 	}
 	
