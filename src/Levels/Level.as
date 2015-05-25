@@ -162,6 +162,11 @@
 			}
 			disposables = newDisposables;
 		}
+		
+		//meant to be used by handlers without access to 'instantiate'
+		public function requestSpawn(imageName:String, position:Vector2D):Image2D {
+			return instantiate(imageName, position);
+		}
 
 		//called by child classes to get objects colliding with a 'source'
 		protected function checkCollisions(source:Image2D, targetName:String = null, targetTag:String = null):Array {

@@ -72,6 +72,7 @@
 			addTexture("../Resources/Textures/InGame/Popup/Resume.png");
 			addTexture("../Resources/Textures/InGame/Popup/Exit.png");
 			addTexture("../Resources/Textures/InGame/Popup/Board.png");
+			addTexture("../Resources/Textures/InGame/Popup/GameOver.png");
 			addTexture("../Resources/Textures/InGame/Active/Core.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg1.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
@@ -256,7 +257,8 @@
 					GameEngine.debug.print("Player using ability ".concat(ability), 0);
 					var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 					abilityTexture.rotate(targetPlayer.getData().rotation);
-					checkCollisions(abilityTexture, null, "Enemy");
+					var enemies:Array = checkCollisions(abilityTexture, null, "Enemy");
+					filterCollisions(enemies);
 					destroy(abilityTexture, 1);
 				} else {
 					if (player == 1) {
@@ -267,6 +269,11 @@
 					GameEngine.debug.print("Not enough energy to use ability [".concat(targetStats.energy, " available]"), 0);
 				}
 			}
+		}
+		
+		//used to only get collisions in front of our textures
+		private function filterCollisions(enemies:Array):void {
+			
 		}
 
 		//function to set number of players

@@ -71,7 +71,8 @@
 		private static function getVertices(image:Image2D):Array {
 			var vertices:Array = new Array(4);
 			var position:Vector2D = image.getPosition();
-			var dimensions:Vector2D = image.getInitDimensions();
+			var collisionBorder:Vector2D = new Vector2D(32, 32);
+			var dimensions:Vector2D = new Vector2D(image.getInitDimensions().x + collisionBorder.x, image.getInitDimensions().y + collisionBorder.y);
 			var rotation:Number = image.getData().rotation;
 			var radius:Number;
 			
