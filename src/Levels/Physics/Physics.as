@@ -11,6 +11,7 @@
 		
 		//used to get all the objects that collided with 'source', inside an 'objectList'
 		public static function checkCollisions(source:Image2D, objectList:Array):Array {
+			GameEngine.debug.print("Checking collisions with '".concat(source.getName(), "'"), 4);
 			var i:int;
 			var curObject:Image2D;
 			var sourceVertices:Array;
@@ -26,6 +27,7 @@
 				}
 			}
 			
+			GameEngine.debug.print("Found '".concat(collidedObjects.length, "' objects"), 4);
 			if (collidedObjects.length == 0) {
 				return null;
 			}
@@ -82,7 +84,7 @@
 			var newCoords:Vector2D;
 			for (j = 0; j < vertices.length; j++) {
 				angle1 = getAngle(vertices[j], new Vector2D(1, 0));		//angle before rotation
-				angle2 = angle1+rotation;								//angle after rotation
+				angle2 = degToRad(angle1+rotation);						//angle after rotation
 				newCoords = new Vector2D(radius*Math.cos(angle2), radius*Math.sin(angle2));
 				vertices[j] = newCoords;								//set new coordinates for vertice
 			}
