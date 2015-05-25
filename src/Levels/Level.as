@@ -28,7 +28,6 @@
 			GameEngine.debug.print("Created new Canvas: ".concat(canvas.toString()), 0);
 			imageRequests = new Array();
 			buttons = new Array();
-			disposables = new Array();
 			setup();
 		}
 		
@@ -65,6 +64,7 @@
 		//functioned called once, right after all assets are loaded
 		protected function start():void {
 			GameEngine.debug.print("'Start' method running for level", 0);
+			disposables = new Array();
 		}
 		
 		//level's main loop
@@ -84,6 +84,18 @@
 		//used by child classes to create a button from an image
 		protected function makeButton(button:Image2D):void {
 			buttons[buttons.length] = button;
+		}
+		
+		//used by child classes to remove a button
+		protected function removeButton(button:Image2D):void {
+			var newButtons:Array = new Array();
+			var i:int;
+			for (i = 0; i < buttons.length; i++) {
+				if (buttons[i] != button) {
+					newButtons[newButtons.length] = buttons[i];
+				}
+			}
+			buttons = newButtons;
 		}
 		
 		//used to handle the 'wasClicked' property of a button
@@ -128,6 +140,7 @@
 		
 		private function cleanUp():void {
 			canvas.clear();
+			disposables.length = 0;
 		}
 		
 		protected function destroy(image:Image2D, delay:Number):void {

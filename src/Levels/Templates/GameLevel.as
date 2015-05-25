@@ -6,6 +6,7 @@
 	import Handlers.Controls.*;
 	
 	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
 	import Levels.Auxiliary.PlayerStats;
 	import Levels.Auxiliary.Ability;
 	
@@ -24,6 +25,11 @@
 		private var corebg1:Image2D;
 		private var corebg2:Image2D;
 		
+		//Popup related
+		private var popBoard:Image2D;
+		private var popResume:Image2D;
+		private var popExit:Image2D;
+		
 		private var nPlayers:int = 1;
 		private var ROT_SPEED:int = 5;
 		
@@ -37,6 +43,12 @@
 		private var player2EnergyDisplay:Array;
 		
 		private var abilities:Array;
+		
+		private var isPaused:Boolean = false;
+		
+		//pause menu related
+		private var nextCatch:Number = 0;
+		private var catchDelay:Number = 0.2;
 		
 		public function GameLevel(engine:GameEngine) {
 			super(engine);
@@ -55,6 +67,9 @@
 			addTexture("../Resources/Textures/InGame/Active/Player_1.png");
 			addTexture("../Resources/Textures/InGame/Active/Player_2.png");
 			addTexture("../Resources/Textures/InGame/Active/Warning.png");
+			addTexture("../Resources/Textures/InGame/Popup/Resume.png");
+			addTexture("../Resources/Textures/InGame/Popup/Exit.png");
+			addTexture("../Resources/Textures/InGame/Popup/Board.png");
 			addTexture("../Resources/Textures/InGame/Active/Core.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg1.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
@@ -118,9 +133,69 @@
 			super.update();
 			if (!assetsLoaded) {return 0;}
 			
-			playerUpdate();
-			animations();
+			handleEscPress();
+			if (!isPaused) {
+				playerUpdate();
+				animations();
+			} else {
+				return popupUpdate();
+			}
 			return 0;
+		}
+		
+		//used to toggle pause with 'esc' press
+		private function handleEscPress():void {
+			var curTime:Number = getTimer();
+			if (curTime >= nextCatch && gameEngine.eventHandler.getKeyDown(Keyboard.ESCAPE)) {
+				if (isPaused) {
+					unPause();
+				} else {
+					pause();
+				}
+				nextCatch = curTime+catchDelay*1000;
+			}
+		}
+		
+		//used to handle button presses while paused
+		private function popupUpdate():int {
+			if (popResume.getMouseClick()) {
+				hidePopup();
+				isPaused = false;
+			} else if (popExit.getMouseClick()) {
+				hidePopup();
+				return -1;
+			}
+			return 0;
+		}
+		
+		//used to pause the game
+		private function pause():void {
+			isPaused = true;
+			showPopup();
+		}  
+		
+		//used to unPause the game
+		private function unPause():void {
+			hidePopup();
+			isPaused = false;
+		}
+		
+		//used to show the Pop-up
+		private function showPopup():void {
+			popBoard = instantiate("Board", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+			popResume = instantiate("Resume", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 - canvas.dimensions.y/24));
+			popExit = instantiate("Exit", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 + canvas.dimensions.y/24));
+			this.makeButton(popResume);
+			this.makeButton(popExit);
+		}
+		
+		//used to hide the Pop-up
+		private function hidePopup():void {
+			destroy(popBoard, 0);
+			removeButton(popResume);
+			destroy(popResume, 0);
+			removeButton(popExit);
+			destroy(popExit, 0);
 		}
 		
 		private function playerUpdate():void {

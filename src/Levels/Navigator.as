@@ -31,7 +31,7 @@
 			accountMenu = new AccountMenu(gameEngine);
 			optionsMenu = new OptionsMenu(gameEngine);
 			helpMenu = new HelpMenu(gameEngine);
-			gameLevel = new GameLevel(gameEngine);
+			//gameLevel = new GameLevel(gameEngine);
 		}
 		
 		//used for value attribution
@@ -68,11 +68,11 @@
 				} else if (curLevel == playMenu) {
 					switch(curLevelBehaviour) {
 						case 1:
-							changeLevel(gameLevel);
+							changeLevel((gameLevel = new GameLevel(gameEngine)));
 							gameLevel.setPlayerNumber(1);
 							break;
 						case 2:
-							changeLevel(gameLevel);
+							changeLevel((gameLevel = new GameLevel(gameEngine)));
 							gameLevel.setPlayerNumber(2);
 							break;
 						case 3:
