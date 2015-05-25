@@ -54,6 +54,7 @@
 			addTexture("../Resources/Textures/InGame/Props/Player_2_symbol.png");
 			addTexture("../Resources/Textures/InGame/Active/Player_1.png");
 			addTexture("../Resources/Textures/InGame/Active/Player_2.png");
+			addTexture("../Resources/Textures/InGame/Active/Warning.png");
 			addTexture("../Resources/Textures/InGame/Active/Core.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg1.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
@@ -126,8 +127,10 @@
 			movePlayers();
 			player1Stats.update();
 			updateEnergy(1);
-			player2Stats.update();
-			updateEnergy(2);
+			if (nPlayers != 1) {
+				player2Stats.update();
+				updateEnergy(2);
+			}
 			useAbilities();
 		}
 		
@@ -203,6 +206,11 @@
 				abilityTexture.rotate(targetPlayer.getData().rotation);
 				destroy(abilityTexture, 1);
 			} else {
+				if (player == 1) {
+					destroy(instantiate("Warning", new Vector2D(canvas.dimensions.x/2, topBorder.getPosition().y + topBorder.getHeight()/2)), 2);
+				} else {
+					destroy(instantiate("Warning", new Vector2D(canvas.dimensions.x/2, botBorder.getPosition().y - botBorder.getHeight()/2)), 2);
+				}
 				GameEngine.debug.print("Not enough energy to use ability [".concat(targetStats.energy, " available]"), 0);
 			}
 		}

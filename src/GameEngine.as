@@ -30,7 +30,7 @@
 		private function init():void {
 
 			debug = new Debug(5);
-			debug.toggle();
+			//debug.toggle();
 			eventHandler = new EventHandler();
 			navigator = new Navigator(this);
 		}
