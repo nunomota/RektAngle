@@ -200,18 +200,20 @@
 			var targetStats:PlayerStats = getPlayerStats(player);
 			var targetAbility:Ability = abilities[ability-1];
 			
-			if (targetStats.spendEnergy(targetAbility.cost) == 0) {
-				GameEngine.debug.print("Player using ability ".concat(ability), 0);
-				var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
-				abilityTexture.rotate(targetPlayer.getData().rotation);
-				destroy(abilityTexture, 1);
-			} else {
-				if (player == 1) {
-					destroy(instantiate("Warning", new Vector2D(canvas.dimensions.x/2, topBorder.getPosition().y + topBorder.getHeight()/2)), 2);
+			if (targetStats.hasReloaded()) {
+				if (targetStats.spendEnergy(targetAbility.cost) == 0) {
+					GameEngine.debug.print("Player using ability ".concat(ability), 0);
+					var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+					abilityTexture.rotate(targetPlayer.getData().rotation);
+					destroy(abilityTexture, 1);
 				} else {
-					destroy(instantiate("Warning", new Vector2D(canvas.dimensions.x/2, botBorder.getPosition().y - botBorder.getHeight()/2)), 2);
+					if (player == 1) {
+						destroy(instantiate("Warning", new Vector2D(canvas.dimensions.x/2, topBorder.getPosition().y + topBorder.getHeight()/2)), 2);
+					} else {
+						destroy(instantiate("Warning", new Vector2D(canvas.dimensions.x/2, botBorder.getPosition().y - botBorder.getHeight()/2)), 2);
+					}
+					GameEngine.debug.print("Not enough energy to use ability [".concat(targetStats.energy, " available]"), 0);
 				}
-				GameEngine.debug.print("Not enough energy to use ability [".concat(targetStats.energy, " available]"), 0);
 			}
 		}
 
