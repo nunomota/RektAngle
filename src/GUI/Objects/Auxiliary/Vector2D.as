@@ -16,7 +16,7 @@
 			return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
 		}
 		
-		//used to rotate vector 
+		//used to rotate vector, using radians
 		public function rotate(angleRad:Number):Vector2D {
 			var rotVector:Vector2D = new Vector2D(this.x * Math.cos(-angleRad) + this.y * Math.sin(-angleRad), -1 * this.x * Math.sin(-angleRad) + this.y * Math.cos(-angleRad));
 			GameEngine.debug.print("Vector ".concat(this.toString(), " rotated to ", rotVector.toString(), " by ", Physics.radToDeg(angleRad), " degrees"), 4);

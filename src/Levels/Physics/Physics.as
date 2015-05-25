@@ -100,7 +100,6 @@
 			GameEngine.debug.print("Adding translation vector ".concat(tanslationVector.toString()), 4);
 			for (i = 0; i < vertices.length; i++) {
 				vertices[i] = new Vector2D(vertices[i].x + tanslationVector.x, vertices[i].y + tanslationVector.y);
-				//vertices[i] = new Vector2D(vertices[i].x + position.x, vertices[i].y + position.y);
 				GameEngine.debug.print("Vertice ".concat(i, " at ", vertices[i].toString()), 4);
 			}
 			return vertices;
@@ -112,7 +111,7 @@
 		}
 		
 		//return angle between two vectors, in radians
-		private static function getAngle(vector1:Vector2D, vector2:Vector2D = null):Number {
+		public static function getAngle(vector1:Vector2D, vector2:Vector2D = null):Number {
 			var magnitude1:Number = vector1.getMagnitude();
 			if (vector2 == null) {
 				vector2 = new Vector2D(1, 0);

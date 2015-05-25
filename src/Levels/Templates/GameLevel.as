@@ -4,6 +4,7 @@
 	import GUI.Objects.Auxiliary.Vector2D;
 	import GUI.Objects.*;
 	import Handlers.Controls.*;
+	import Levels.Physics.*;
 	
 	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
@@ -258,7 +259,7 @@
 					var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 					abilityTexture.rotate(targetPlayer.getData().rotation);
 					var enemies:Array = checkCollisions(abilityTexture, null, "Enemy");
-					filterCollisions(enemies);
+					enemies = filterCollisions(abilityTexture, enemies);
 					destroy(abilityTexture, 1);
 				} else {
 					if (player == 1) {
@@ -271,9 +272,32 @@
 			}
 		}
 		
-		//used to only get collisions in front of our textures
-		private function filterCollisions(enemies:Array):void {
+		//used to only get collisions in front of our textures (abilities and players should call this method)
+		private function filterCollisions(source:Image2D, enemies:Array):Array {
+			var filteredCollisions:Array = new Array();
+			var sourcePosition:Vector2D = source.getPosition();
+			var rotation:Number = Physics.degToRad(source.getData().rotation);
+			var directionVector:Vector2D = new Vector2D(0, -1);
+			directionVector = directionVector.rotate(rotation);
 			
+			var i:int;
+			var curEnemy:Image2D;
+			var curVector:Vector2D;
+			if (enemies != null) {
+				for (i = 0; i < enemies.length; i++) {
+					curEnemy = enemies[i];
+					curVector = Physics.getVector(sourcePosition, curEnemy.getPosition());
+					if (Physics.getAngle(directionVector, curVector) <= Math.PI/2) {
+						filteredCollisions[filteredCollisions.length] = curEnemy;
+					}
+				}
+			}
+			
+			GameEngine.debug.print("Objects after filtering: ".concat(filteredCollisions.length), 4);
+			if (filteredCollisions.length > 0) {
+				return filteredCollisions;
+			}
+			return null;
 		}
 
 		//function to set number of players
