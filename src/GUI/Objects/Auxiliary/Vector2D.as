@@ -10,6 +10,10 @@
 			y = posY;
 		}
 		
+		public function getMagnitude():Number {
+			return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+		}
+		
 		public function toString():String {
 			return "(".concat(x, ",", y, ")");
 		}

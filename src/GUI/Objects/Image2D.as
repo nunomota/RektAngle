@@ -13,6 +13,7 @@
 		private var imageData:Bitmap;
 		private var position:Vector2D;
 		public var name:String = "";
+		private var tag:String = "";
 		
 		private var wasClicked:Boolean = false;
 		
@@ -108,6 +109,14 @@
 			var temp:Boolean = wasClicked;
 			wasClicked = false;
 			return temp;
+		}
+		
+		public function setTag(newTag:String):void {
+			this.tag = newTag;
+		}
+		
+		public function getTag():String {
+			return this.tag;
 		}
 		
 		public function setName(newName:String):void {

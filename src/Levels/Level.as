@@ -4,6 +4,7 @@
 	import GUI.Objects.Auxiliary.Vector2D;
 	import GUI.Objects.Image2D;
 	import GUI.Objects.Disposable;
+	import Levels.Physics.*;
 	
 	public class Level {
 
@@ -149,6 +150,29 @@
 			disposables = newDisposables;
 		}
 
+		private function checkCollisions(source:Image2D, targetName:String = null, targetTag:String = null):Array {
+			var possibleObjects:Array = new Array();
+			var collisionsDetected:Array;
+			
+			var curImage:Image2D;
+			var i:int;
+			for (i = 0; i < imagesDrawn.length; i++) {
+				curImage = imagesDrawn[i];
+				if (source != curImage) {		//if it is not itself
+					if (targetName != null || targetTag != null) {		//if I wanna search by name or tag
+						if (targetName != null && curImage.getName() == targetName) {		//if name matches
+							possibleObjects[possibleObjects.length] = curImage;
+						} else if (targetTag != null && curImage.getTag() == targetTag) {	//if tag matches
+							possibleObjects[possibleObjects.length] = curImage;
+						}
+					} else {											//if I just want everything except itself
+						possibleObjects[possibleObjects.length] = curImage;
+					}
+				}
+			}
+			collisionsDetected = Physics.checkCollisions(source, possibleObjects);
+			return collisionsDetected;
+		}
 	}
 	
 }
