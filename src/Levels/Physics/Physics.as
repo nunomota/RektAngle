@@ -22,7 +22,7 @@
 				nearVertices = getNearestVertices(sourceVertices, curObject);
 				var angle1:Number = getAngle(getVector(nearVertices[0], nearVertices[1]), getVector(nearVertices[0], source.getPosition()));
 				var angle2:Number = getAngle(getVector(nearVertices[0], nearVertices[2]), getVector(nearVertices[0], source.getPosition()));
-				if (angle1 <= 90 && angle2 <= 90) {
+				if (angle1 <= Math.PI && angle2 <= Math.PI) {
 					collidedObjects[collidedObjects.length] = curObject;
 				}
 			}
@@ -84,16 +84,18 @@
 			var angle2:Number;
 			var newCoords:Vector2D;
 			for (j = 0; j < vertices.length; j++) {
-				angle1 = getAngle(vertices[j], new Vector2D(1, 0));		//angle before rotation
-				angle2 = degToRad(angle1+rotation);						//angle after rotation
+				angle1 = getAngle(vertices[j]);							//angle before rotation
+				angle2 = angle1+degToRad(rotation);						//angle after rotation
 				newCoords = new Vector2D(radius*Math.cos(angle2), radius*Math.sin(angle2));
 				vertices[j] = newCoords;								//set new coordinates for vertice
+				GameEngine.debug.print("Vertice ".concat(j, " at ", vertices[j].toString()), 4);
 			}
 			
 			//add their current position (take image away from 0,0)
 			var i:int;
 			for (i = 0; i < vertices.length; i++) {
 				vertices[i] = new Vector2D(vertices[i].x + position.x, vertices[i].y + position.y);
+				//GameEngine.debug.print("Vertice ".concat(i, " at ", vertices[i].toString()), 4);
 			}
 			return vertices;
 		}
@@ -103,18 +105,27 @@
 			return (new Vector2D(position2.x - position1.x, position2.y - position1.y));
 		}
 		
-		//return angle between two vectors, in degrees
-		private static function getAngle(vector1:Vector2D, vector2:Vector2D):Number {
+		//return angle between two vectors, in radians
+		private static function getAngle(vector1:Vector2D, vector2:Vector2D = null):Number {
 			var magnitude1:Number = vector1.getMagnitude();
+			if (vector2 == null) {
+				vector2 = new Vector2D(1, 0);
+			}
 			var magnitude2:Number = vector2.getMagnitude();
 			var dotProduct:Number = vector1.x * vector2.x + vector1.y * vector2.y;
-			
-			return Math.acos(dotProduct/(magnitude1*magnitude2));
+			var angleRad:Number = Math.acos(dotProduct/(magnitude1*magnitude2));
+			GameEngine.debug.print("Angle between ".concat(vector1.toString(), " and ", vector2.toString(), " is ", radToDeg(angleRad)), 4);
+			return angleRad;
 		}
 		
 		//converts angles from degrees to radians
 		public static function degToRad(angleDeg:Number):Number {
 			return (angleDeg/180)*Math.PI;
+		}
+		
+		//converts angles from radians to degrees
+		public static function radToDeg(angleRad:Number):Number {
+			return (angleRad/Math.PI)*180;
 		}
 
 	}

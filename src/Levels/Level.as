@@ -28,6 +28,7 @@
 			GameEngine.debug.print("Created new Canvas: ".concat(canvas.toString()), 0);
 			imageRequests = new Array();
 			buttons = new Array();
+			disposables = new Array();
 			setup();
 		}
 		
@@ -64,7 +65,6 @@
 		//functioned called once, right after all assets are loaded
 		protected function start():void {
 			GameEngine.debug.print("'Start' method running for level", 0);
-			disposables = new Array();
 		}
 		
 		//level's main loop
@@ -140,7 +140,7 @@
 		
 		private function cleanUp():void {
 			canvas.clear();
-			disposables.length = 0;
+			//disposables.length = 0;
 		}
 		
 		protected function destroy(image:Image2D, delay:Number):void {
@@ -184,6 +184,7 @@
 					}
 				}
 			}
+			GameEngine.debug.print("Passing ".concat(possibleObjects.length, " possible object(s)"), 4);
 			collisionsDetected = Physics.checkCollisions(source, possibleObjects);
 			return collisionsDetected;
 		}

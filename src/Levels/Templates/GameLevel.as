@@ -50,6 +50,8 @@
 		private var nextCatch:Number = 0;
 		private var catchDelay:Number = 0.2;
 		
+		private var enemy:Image2D;		//TEST
+		
 		public function GameLevel(engine:GameEngine) {
 			super(engine);
 			this.gameEngine = engine;
@@ -74,6 +76,7 @@
 			addTexture("../Resources/Textures/InGame/Active/Corebg1.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
 			addTexture("../Resources/Textures/InGame/Active/GreenRay.png");
+			addTexture("../Resources/Textures/InGame/Active/AI/GreenEnemy.png");		//TEST
 			var i:int;
 			for (i = 0; i < 10; i++) {
 				addTexture("../Resources/Textures/InGame/Numbers/".concat(i, ".png"));
@@ -89,7 +92,7 @@
 			player2EnergyDisplay = new Array();
 			
 			abilities = new Array();
-			abilities[0] = new Ability("GreenRay", 50, 50);
+			abilities[0] = new Ability("GreenRay", 0, 50);
 			//abilities[1] = new Ability();
 			//abilities[2] = new Ability();
 		}
@@ -126,6 +129,9 @@
 				playerSymbol2.setPosition(new Vector2D(playerSymbol2.getPosition().x + playerSymbol2.getWidth()/2 + offset.x, playerSymbol2.getPosition().y - playerSymbol2.getHeight()/2 - offset.y));
 				updateDisplays(2);
 			}
+			
+			enemy = instantiate("GreenEnemy", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/4));		//TEST
+			enemy.setTag("Enemy");
 		}
 		
 		//level's main loop
@@ -166,36 +172,6 @@
 				return -1;
 			}
 			return 0;
-		}
-		
-		//used to pause the game
-		private function pause():void {
-			isPaused = true;
-			showPopup();
-		}  
-		
-		//used to unPause the game
-		private function unPause():void {
-			hidePopup();
-			isPaused = false;
-		}
-		
-		//used to show the Pop-up
-		private function showPopup():void {
-			popBoard = instantiate("Board", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
-			popResume = instantiate("Resume", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 - canvas.dimensions.y/22));
-			popExit = instantiate("Exit", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 + canvas.dimensions.y/22));
-			this.makeButton(popResume);
-			this.makeButton(popExit);
-		}
-		
-		//used to hide the Pop-up
-		private function hidePopup():void {
-			destroy(popBoard, 0);
-			removeButton(popResume);
-			destroy(popResume, 0);
-			removeButton(popExit);
-			destroy(popExit, 0);
 		}
 		
 		private function playerUpdate():void {
@@ -280,6 +256,7 @@
 					GameEngine.debug.print("Player using ability ".concat(ability), 0);
 					var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 					abilityTexture.rotate(targetPlayer.getData().rotation);
+					checkCollisions(abilityTexture, null, "Enemy");
 					destroy(abilityTexture, 1);
 				} else {
 					if (player == 1) {
@@ -423,6 +400,36 @@
 				return player1EnergyDisplay;
 			}
 			return player2EnergyDisplay;
+		}
+		
+		//used to pause the game
+		private function pause():void {
+			isPaused = true;
+			showPopup();
+		}  
+		
+		//used to unPause the game
+		private function unPause():void {
+			hidePopup();
+			isPaused = false;
+		}
+		
+		//used to show the Pop-up
+		private function showPopup():void {
+			popBoard = instantiate("Board", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+			popResume = instantiate("Resume", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 - canvas.dimensions.y/22));
+			popExit = instantiate("Exit", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 + canvas.dimensions.y/22));
+			this.makeButton(popResume);
+			this.makeButton(popExit);
+		}
+		
+		//used to hide the Pop-up
+		private function hidePopup():void {
+			destroy(popBoard, 0);
+			removeButton(popResume);
+			destroy(popResume, 0);
+			removeButton(popExit);
+			destroy(popExit, 0);
 		}
 	}
 	
