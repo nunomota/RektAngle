@@ -14,7 +14,7 @@
 			GameEngine.debug.print("Checking collisions with '".concat(source.getName(), "'"), 4);
 			var i:int;
 			var curObject:Image2D;
-			var sourceVertices:Array;
+			var sourceVertices:Array = getVertices(source);
 			var nearVertices:Array;
 			var collidedObjects:Array = new Array();
 			for (i = 0; i < objectList.length; i++) {
@@ -36,6 +36,7 @@
 		
 		//returns an array where all vertices come in increasing distance to target point
 		private static function getNearestVertices(sourceVertices:Array, targetObject:Image2D):Array {
+			//TODO increase sourceVertices coordinates according to targetObject.width/2, so that they collide on proximity and not on overlap
 			var i:int;
 			var j:int;
 			var sortedArray:Array = new Array(sourceVertices.length);
@@ -58,7 +59,7 @@
 		
 		//return the distance between 2 points in 2D space
 		public static function getDistance(point1:Vector2D, point2:Vector2D):Number {
-			var vector:Vector2D = new Vector2D(point1.x - point2.x, point1.y - point2.y);
+			var vector:Vector2D = getVector(point1, point2);
 			return vector.getMagnitude();
 		}
 		
