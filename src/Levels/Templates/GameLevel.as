@@ -183,8 +183,8 @@
 		//used to show the Pop-up
 		private function showPopup():void {
 			popBoard = instantiate("Board", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
-			popResume = instantiate("Resume", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 - canvas.dimensions.y/24));
-			popExit = instantiate("Exit", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 + canvas.dimensions.y/24));
+			popResume = instantiate("Resume", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 - canvas.dimensions.y/22));
+			popExit = instantiate("Exit", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2 + canvas.dimensions.y/22));
 			this.makeButton(popResume);
 			this.makeButton(popExit);
 		}
