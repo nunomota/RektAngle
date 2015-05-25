@@ -14,6 +14,7 @@
 		private var position:Vector2D;
 		public var name:String = "";
 		private var tag:String = "";
+		private var initDimensions:Vector2D;
 		
 		private var wasClicked:Boolean = false;
 		
@@ -22,6 +23,7 @@
 		public function Image2D(data:Bitmap, pos:Vector2D) {
 			this.imageData = data;
 			this.position = pos;
+			this.initDimensions = new Vector2D(this.getWidth(), this.getHeight());
 			
 			centerImage();
 		}
@@ -129,6 +131,10 @@
 		
 		public function getData():Bitmap {
 			return this.imageData;
+		}
+		
+		public function getInitDimensions():Vector2D {
+			return this.initDimensions;
 		}
 	}
 	

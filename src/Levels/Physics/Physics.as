@@ -15,14 +15,17 @@
 			var i:int;
 			var curObject:Image2D;
 			var sourceVertices:Array = getVertices(source);
-			var nearVertices:Array;
+			//var nearVertices:Array;
 			var collidedObjects:Array = new Array();
 			for (i = 0; i < objectList.length; i++) {
 				curObject = objectList[i];
-				nearVertices = getNearestVertices(sourceVertices, curObject);
-				var angle1:Number = getAngle(getVector(nearVertices[0], nearVertices[1]), getVector(nearVertices[0], source.getPosition()));
-				var angle2:Number = getAngle(getVector(nearVertices[0], nearVertices[2]), getVector(nearVertices[0], source.getPosition()));
-				if (angle1 <= Math.PI && angle2 <= Math.PI) {
+				GameEngine.debug.print("Object at ".concat(curObject.getPosition().toString()), 4);
+				//nearVertices = getNearestVertices(sourceVertices, curObject);
+				var angle1:Number = getAngle(getVector(sourceVertices[0], sourceVertices[1]), getVector(sourceVertices[0], curObject.getPosition()));
+				var angle2:Number = getAngle(getVector(sourceVertices[0], sourceVertices[3]), getVector(sourceVertices[0], curObject.getPosition()));
+				var angle3:Number = getAngle(getVector(sourceVertices[2], sourceVertices[1]), getVector(sourceVertices[2], curObject.getPosition()));
+				var angle4:Number = getAngle(getVector(sourceVertices[2], sourceVertices[3]), getVector(sourceVertices[2], curObject.getPosition()));
+				if ((angle1 >= 0 && angle1 <= Math.PI/2) && (angle2 >= 0 && angle2 <= Math.PI/2) && (angle3 >= 0 && angle3 <= Math.PI/2) && (angle4 >= 0 && angle4 <= Math.PI/2)) {
 					collidedObjects[collidedObjects.length] = curObject;
 				}
 			}
@@ -68,11 +71,12 @@
 		private static function getVertices(image:Image2D):Array {
 			var vertices:Array = new Array(4);
 			var position:Vector2D = image.getPosition();
-			var dimensions:Vector2D = new Vector2D(image.getWidth(), image.getHeight());
+			var dimensions:Vector2D = image.getInitDimensions();
 			var rotation:Number = image.getData().rotation;
 			var radius:Number;
 			
 			//how vertices would be b4 their rotation
+			GameEngine.debug.print("Getting vertices for image ".concat(dimensions.toString()), 4);
 			vertices[0] = new Vector2D(-dimensions.x/2, dimensions.y/2);
 			vertices[1] = new Vector2D(dimensions.x/2, dimensions.y/2);
 			vertices[2] = new Vector2D(dimensions.x/2, -dimensions.y/2);
@@ -87,14 +91,16 @@
 			for (j = 0; j < vertices.length; j++) {
 				newCoords = vertices[j].rotate(degToRad(rotation));		//angle after the rotation
 				vertices[j] = newCoords;								//set new coordinates for vertice
-				GameEngine.debug.print("Vertice ".concat(j, " at ", vertices[j].toString()), 4);
 			}
 			
 			//add their current position (take image away from 0,0)
 			var i:int;
+			var tanslationVector:Vector2D = new Vector2D(position.x, position.y);
+			GameEngine.debug.print("Adding translation vector ".concat(tanslationVector.toString()), 4);
 			for (i = 0; i < vertices.length; i++) {
-				vertices[i] = new Vector2D(vertices[i].x + position.x, vertices[i].y + position.y);
-				//GameEngine.debug.print("Vertice ".concat(i, " at ", vertices[i].toString()), 4);
+				vertices[i] = new Vector2D(vertices[i].x + tanslationVector.x, vertices[i].y + tanslationVector.y);
+				//vertices[i] = new Vector2D(vertices[i].x + position.x, vertices[i].y + position.y);
+				GameEngine.debug.print("Vertice ".concat(i, " at ", vertices[i].toString()), 4);
 			}
 			return vertices;
 		}
