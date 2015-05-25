@@ -24,7 +24,7 @@
 		}
 		
 		public function toString():String {
-			return "(".concat(x, ",", y, ")");
+			return "(".concat(x.toFixed(1), ",", y.toFixed(1), ")");
 		}
 
 	}

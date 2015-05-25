@@ -8,7 +8,7 @@
 		
 		public function Debug(filter:int) {
 			isEnabled = false;
-			debugTags = new Array("", "[Event]", "[Warning]", "[Error]", "[Physics]");
+			debugTags = new Array("", "[Event]", "[Warning]", "[Error]", "[Physics]", "[Temp]");
 			messageFilter = filter;
 		}
 		

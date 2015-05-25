@@ -256,9 +256,7 @@
 					GameEngine.debug.print("Player using ability ".concat(ability), 0);
 					var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 					abilityTexture.rotate(targetPlayer.getData().rotation);
-					//checkCollisions(abilityTexture, null, "Enemy");
-					var vector:Vector2D = new Vector2D(1, 0);
-					vector.rotate(Math.PI/2);
+					checkCollisions(abilityTexture, null, "Enemy");
 					destroy(abilityTexture, 1);
 				} else {
 					if (player == 1) {

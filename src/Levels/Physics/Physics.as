@@ -45,12 +45,13 @@
 				var minDistance:Number = getDistance(sourceVertices[0], targetObject.getPosition());
 				var minIndex:int = 0;
 				for (j = 1; j < sourceVertices.length; j++) {
-					var curDistance:Number = getDistance(sourceVertices[1], targetObject.getPosition());
+					var curDistance:Number = getDistance(sourceVertices[j], targetObject.getPosition());
 					if (curDistance < minDistance) {
 						minDistance = curDistance;
 						minIndex = j;
 					}
 				}
+				GameEngine.debug.print("Nearest vertice ".concat(i, " is ", sourceVertices[minIndex].toString(), " with distance ", minDistance), 4);
 				sortedArray[i] = sourceVertices[minIndex];
 				sourceVertices.splice(minIndex, 1);
 			}
@@ -84,10 +85,7 @@
 			var angle2:Number;
 			var newCoords:Vector2D;
 			for (j = 0; j < vertices.length; j++) {
-				angle1 = getAngle(vertices[j]);							//angle before rotation
-				angle2 = angle1+degToRad(rotation);						//angle after rotation
-				newCoords = vertices[j].rotate(degToRad(rotation));				//angle after the rotation
-				newCoords = new Vector2D(radius*Math.cos(angle2), radius*Math.sin(angle2));
+				newCoords = vertices[j].rotate(degToRad(rotation));		//angle after the rotation
 				vertices[j] = newCoords;								//set new coordinates for vertice
 				GameEngine.debug.print("Vertice ".concat(j, " at ", vertices[j].toString()), 4);
 			}
