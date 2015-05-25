@@ -9,6 +9,7 @@
 			
 		}
 		
+		//used to get all the objects that collided with 'source', inside an 'objectList'
 		public static function checkCollisions(source:Image2D, objectList:Array):Array {
 			var i:int;
 			var curObject:Image2D;
@@ -32,7 +33,7 @@
 		}
 		
 		//returns an array where all vertices come in increasing distance to target point
-		private function getNearestVertices(sourceVertices:Array, targetObject:Image2D):Array {
+		private static function getNearestVertices(sourceVertices:Array, targetObject:Image2D):Array {
 			var i:int;
 			var j:int;
 			var sortedArray:Array = new Array(sourceVertices.length);
@@ -54,13 +55,13 @@
 		}
 		
 		//return the distance between 2 points in 2D space
-		public static function getDistance(point1:Vector2D, point2:Vector2D:Number {
+		public static function getDistance(point1:Vector2D, point2:Vector2D):Number {
 			var vector:Vector2D = new Vector2D(point1.x - point2.x, point1.y - point2.y);
 			return vector.getMagnitude();
 		}
 		
 		//return the vertices of an Image2D
-		private function getVertices(image:Image2D):Array {
+		private static function getVertices(image:Image2D):Array {
 			var vertices:Array = new Array(4);
 			var position:Vector2D = image.getPosition();
 			var dimensions:Vector2D = new Vector2D(image.getWidth(), image.getHeight());
@@ -75,9 +76,18 @@
 			radius = vertices[0].getMagnitude();
 			
 			//transform vertices to after the rotation (around 0,0)
-			//TODO this part here
+			var j:int;
+			var angle1:Number;
+			var angle2:Number;
+			var newCoords:Vector2D;
+			for (j = 0; j < vertices.length; j++) {
+				angle1 = getAngle(vertices[j], new Vector2D(1, 0));		//angle before rotation
+				angle2 = angle1+rotation;								//angle after rotation
+				newCoords = new Vector2D(radius*Math.cos(angle2), radius*Math.sin(angle2));
+				vertices[j] = newCoords;								//set new coordinates for vertice
+			}
 			
-			//add their current position
+			//add their current position (take image away from 0,0)
 			var i:int;
 			for (i = 0; i < vertices.length; i++) {
 				vertices[i] = new Vector2D(vertices[i].x + position.x, vertices[i].y + position.y);
@@ -86,17 +96,17 @@
 		}
 		
 		//returns the vector between 2 points in 2D space (from the 1st to the 2nd)
-		public function getVector(position1:Vector2D, position2:Vector2D):Vector2D {
+		public static function getVector(position1:Vector2D, position2:Vector2D):Vector2D {
 			return (new Vector2D(position2.x - position1.x, position2.y - position1.y));
 		}
 		
 		//return angle between two vectors, in degrees
-		private function getAngle(vector1:Vector2D, vector2:Vector2D):Number {
+		private static function getAngle(vector1:Vector2D, vector2:Vector2D):Number {
 			var magnitude1:Number = vector1.getMagnitude();
 			var magnitude2:Number = vector2.getMagnitude();
 			var dotProduct:Number = vector1.x * vector2.x + vector1.y * vector2.y;
 			
-			return Math.acos(dotProduct/(magnitude1*magnitude2);
+			return Math.acos(dotProduct/(magnitude1*magnitude2));
 		}
 		
 		//converts angles from degrees to radians

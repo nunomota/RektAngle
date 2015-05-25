@@ -150,7 +150,8 @@
 			disposables = newDisposables;
 		}
 
-		private function checkCollisions(source:Image2D, targetName:String = null, targetTag:String = null):Array {
+		//called by child classes to get objects colliding with a 'source'
+		protected function checkCollisions(source:Image2D, targetName:String = null, targetTag:String = null):Array {
 			var possibleObjects:Array = new Array();
 			var collisionsDetected:Array;
 			
