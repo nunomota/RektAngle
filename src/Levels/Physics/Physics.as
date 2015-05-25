@@ -72,10 +72,10 @@
 			var radius:Number;
 			
 			//how vertices would be b4 their rotation
-			vertices[0] = new Vector2D(dimensions.x/2, dimensions.y/2);
-			vertices[1] = new Vector2D(dimensions.x/2, -dimensions.y/2);
-			vertices[2] = new Vector2D(-dimensions.x/2, -dimensions.y/2);
-			vertices[3] = new Vector2D(-dimensions.x/2, dimensions.y/2);
+			vertices[0] = new Vector2D(-dimensions.x/2, dimensions.y/2);
+			vertices[1] = new Vector2D(dimensions.x/2, dimensions.y/2);
+			vertices[2] = new Vector2D(dimensions.x/2, -dimensions.y/2);
+			vertices[3] = new Vector2D(-dimensions.x/2, -dimensions.y/2);
 			radius = vertices[0].getMagnitude();
 			
 			//transform vertices to after the rotation (around 0,0)
@@ -86,6 +86,7 @@
 			for (j = 0; j < vertices.length; j++) {
 				angle1 = getAngle(vertices[j]);							//angle before rotation
 				angle2 = angle1+degToRad(rotation);						//angle after rotation
+				newCoords = vertices[j].rotate(degToRad(rotation));				//angle after the rotation
 				newCoords = new Vector2D(radius*Math.cos(angle2), radius*Math.sin(angle2));
 				vertices[j] = newCoords;								//set new coordinates for vertice
 				GameEngine.debug.print("Vertice ".concat(j, " at ", vertices[j].toString()), 4);
