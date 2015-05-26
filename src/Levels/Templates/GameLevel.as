@@ -297,7 +297,7 @@
 						var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 						abilityTexture.rotate(targetPlayer.getData().rotation);
 						var enemies:Array = filterCollisions(abilityTexture, checkCollisions(abilityTexture, null, "Enemy"));
-						explodeEnemies(enemies);
+						explodeEnemies(enemies, player);
 						destroy(abilityTexture, 1);
 					} else if (targetAbility.name == "BlueAbility") {
 						if (blueAbilityEnabled[player-1]) {
@@ -349,10 +349,11 @@
 		}
 		
 		//used to destroy the enemies hit
-		private function explodeEnemies(enemyArray:Array):void {
+		private function explodeEnemies(enemyArray:Array, player:int):void {
 			var i:int;
 			var curEnemy:Image2D;
 			var curEnemyPos:Vector2D;
+			var targetStats:PlayerStats = getPlayerStats(player);
 			if (enemyArray != null) {
 				GameEngine.debug.print("Enemies to explode: ".concat(enemyArray.length), 5);
 				for (i = 0; i < enemyArray.length; i++) {
@@ -360,6 +361,7 @@
 					curEnemyPos = curEnemy.getPosition();
 					destroy(curEnemy, 0);
 					destroy(instantiate("Explosion_1", curEnemyPos), 2);
+					addPoints(player, 50);
 				}
 			}
 		}
