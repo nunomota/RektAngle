@@ -14,6 +14,7 @@
 	public class GameLevel extends Level {
 
 		private var gameEngine:GameEngine;
+		private var MAX_LIVES:int = 4;
 		
 		private var background:Image2D;
 		private var topBorder:Image2D;
@@ -55,9 +56,15 @@
 		
 		private var enemy:Image2D;		//TEST
 		
+		private var curLives:int;
+		private var timeOfLoss:Number;
+		private var timeOfTeleport:Number;
+		private var menuTeleportDelay:Number = 8;
+		
 		public function GameLevel(engine:GameEngine) {
 			super(engine);
 			this.gameEngine = engine;
+			this.curLives = MAX_LIVES;
 		}
 		
 		//used to populate the Level's assets
@@ -75,6 +82,7 @@
 			addTexture("../Resources/Textures/InGame/Popup/Resume.png");
 			addTexture("../Resources/Textures/InGame/Popup/Exit.png");
 			addTexture("../Resources/Textures/InGame/Popup/Board.png");
+			addTexture("../Resources/Textures/InGame/Popup/TeleportWarning.png");
 			addTexture("../Resources/Textures/InGame/Popup/GameOver.png");
 			addTexture("../Resources/Textures/InGame/Active/Core.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg1.png");
@@ -146,12 +154,17 @@
 			super.update();
 			if (!assetsLoaded) {return 0;}
 			
-			handleEscPress();
-			if (!isPaused) {
-				playerUpdate();
-				animations();
+			if (curLives > 0) {
+				handleEscPress();
+				if (!isPaused) {
+					decreaseLifePoints();
+					playerUpdate();
+					animations();
+				} else {
+					return popupUpdate();
+				}
 			} else {
-				return popupUpdate();
+				return gameOverUpdate();
 			}
 			return 0;
 		}
@@ -167,18 +180,6 @@
 				}
 				nextCatch = curTime+catchDelay*1000;
 			}
-		}
-		
-		//used to handle button presses while paused
-		private function popupUpdate():int {
-			if (popResume.getMouseClick()) {
-				hidePopup();
-				isPaused = false;
-			} else if (popExit.getMouseClick()) {
-				hidePopup();
-				return -1;
-			}
-			return 0;
 		}
 		
 		private function playerUpdate():void {
@@ -200,6 +201,26 @@
 			core.rotate(coreRot);
 			corebg1.rotate(0-coreRot);
 			corebg2.rotate(coreRot);
+		}
+		
+		private function gameOverUpdate():int {
+			var curTime:Number = getTimer();
+			if (curTime >= timeOfTeleport) {
+				return -1;
+			}
+			return 0;
+		}
+		
+		//used to handle button presses while paused
+		private function popupUpdate():int {
+			if (popResume.getMouseClick()) {
+				hidePopup();
+				isPaused = false;
+			} else if (popExit.getMouseClick()) {
+				hidePopup();
+				return -1;
+			}
+			return 0;
 		}
 		
 		private function movePlayers():void {
@@ -511,6 +532,13 @@
 			isPaused = false;
 		}
 		
+		//used to show the Game-Over screen
+		private function showGameOver():void {
+			instantiate("TeleportWarning", new Vector2D(canvas.dimensions.x/2, topBorder.getPosition().y + topBorder.getHeight()/2));
+			instantiate("Board", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+			instantiate("GameOver", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+		}
+		
 		//used to show the Pop-up
 		private function showPopup():void {
 			popBoard = instantiate("Board", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
@@ -527,6 +555,16 @@
 			destroy(popResume, 0);
 			removeButton(popExit);
 			destroy(popExit, 0);
+		}
+		
+		//used to decrease the current life points
+		private function decreaseLifePoints():void {
+			this.curLives--;
+			if (curLives == 0) {
+				showGameOver();
+				timeOfLoss = getTimer();
+				timeOfTeleport = timeOfLoss + menuTeleportDelay*1000;
+			}
 		}
 	}
 	
