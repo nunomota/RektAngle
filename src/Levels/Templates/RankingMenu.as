@@ -6,6 +6,9 @@
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.events.*;
+	import flash.display.Sprite; 
+    import flash.text.*; 
+	
 
 	import Debug.*;
 	
@@ -83,12 +86,22 @@
 			function onLoaded(e:Event):void {
 				var result:String = e.target.data;
 				var strings:Array = result.split("#");
+				
+				var myTextBox:TextField = new TextField(); 
+				myTextBox.text = strings[0]; 
+				gameEngine.stage.addChild(myTextBox);
+				
+				var myTextBox2:TextField = new TextField(); 
+				myTextBox2.text = strings[1]; 
+				 gameEngine.stage.addChild(myTextBox2); 
+				
+				
 				trace(strings[0]); 
 				trace(strings[1]);
 				trace(strings[2]); 
 				trace(strings[3]);
 				trace(strings[4]); 
-			
+				
 
 
 			}	
