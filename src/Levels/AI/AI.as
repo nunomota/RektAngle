@@ -24,10 +24,6 @@
 		private var enemyTexture:Image2D;
 		
 		private var allEnemies:Array;
-		private var blueEnemies:Array;
-		private var greenEnemies:Array;
-		private var yellowEnemies:Array;
-		private var purpleEnemies:Array;
 		
 		private var teleportDelay:Number = 2; //Time in seconds that I check if it teleports or not
 		private var nextTeleportCheck:Number;
@@ -45,10 +41,6 @@
 			
 			
 			allEnemies = new Array();
-			blueEnemies = new Array();
-			greenEnemies = new Array();
-			yellowEnemies = new Array();
-			purpleEnemies = new Array();
 		}
 		
 		public function update():void{
@@ -144,6 +136,9 @@
 			
 			for (i = 0; i < size; i++) {
 				curEnemy = allEnemies[i];
+				if (curEnemy.hasTriggered == false) {
+					curEnemy.checkToTrigger(Math.random());
+				}
 				curEnemy.move();
 			}
 		}
@@ -160,55 +155,6 @@
 			}
 			
 			allEnemies = newAllEnemiesArray;
-			
-			var newSpecificArray:Array = new Array();
-			var enemyType:int = toRemove.getEnemyType();
-			
-			if (enemyType == BLUE_ENEMY) {
-				size = blueEnemies.length;
-				
-				for(i = 0; i < size; i++) {
-					if(blueEnemies[i] != toRemove) {
-					newSpecificArray.push(blueEnemies[i]);
-					}
-				}
-				blueEnemies = newSpecificArray;
-				
-			} else if (enemyType == GREEN_ENEMY) {
-				
-				size = greenEnemies.length;
-				
-				for(i = 0; i < size; i++) {
-					if(greenEnemies[i] != toRemove) {
-					newSpecificArray.push(greenEnemies[i]);
-					}
-				}
-				greenEnemies = newSpecificArray;
-				
-			} else if(enemyType == YELLOW_ENEMY) {
-				
-				size = yellowEnemies.length;
-				
-				for(i = 0; i < size; i++) {
-					if(yellowEnemies[i] != toRemove) {
-					newSpecificArray.push(yellowEnemies[i]);
-					}
-				}
-				yellowEnemies = newSpecificArray;
-				
-			} else if(enemyType == PURPLE_ENEMY) {
-				
-				size = purpleEnemies.length;
-				
-				for(i = 0; i < size; i++) {
-					if(purpleEnemies[i] != toRemove) {
-					newSpecificArray.push(purpleEnemies[i]);
-					}
-				}
-				purpleEnemies = newSpecificArray;
-				
-			}
-			
 		} 
 		
 		public function getAllEnemies():Array{

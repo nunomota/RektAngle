@@ -19,7 +19,7 @@
 		private var enemyImage:Image2D;
 		private var direction:Vector2D;
 		private var canvas:CanvasHandler;
-		private var hasTriggered:Boolean;
+		public var hasTriggered:Boolean;
 		private var probability:Number;
 		
 		private var BLUE_ENEMY:int = 0;
@@ -72,20 +72,14 @@
 		//trigger special movement
 		public function triggerSpecialMovement():void {
 			
-			if (enemyType == BLUE_ENEMY) {
-				var newVector:Vector2D = Physics.getVector(new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2), enemyImage.getPosition());
-				
-				newVector.rotate(Math.random()*(2*Math.PI));
-				enemyImage.setX(canvas.dimensions.x/2 + newVector.x);
-				enemyImage.setY(canvas.dimensions.y/2 + newVector.y);
-				
-				direction = getDirectionToCenter();
-				
-				
-			} else if (enemyType == YELLOW_ENEMY) {
-				
-			}
+			var newVector:Vector2D = Physics.getVector(new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2), enemyImage.getPosition());
 			
+			newVector.rotate(Math.random()*(2*Math.PI));
+			enemyImage.setX(canvas.dimensions.x/2 + newVector.x);
+			enemyImage.setY(canvas.dimensions.y/2 + newVector.y);
+			
+			direction = getDirectionToCenter();
+				
 			hasTriggered = true;
 		}
 		
