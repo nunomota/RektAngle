@@ -24,10 +24,6 @@
 		private var enemyTexture:Image2D;
 		
 		private var allEnemies:Array;
-		private var blueEnemies:Array;
-		private var greenEnemies:Array;
-		private var yellowEnemies:Array;
-		private var purpleEnemies:Array;
 		
 		private var teleportDelay:Number = 2; //Time in seconds that I check if it teleports or not
 		private var nextTeleportCheck:Number;
@@ -42,13 +38,8 @@
 			this.curLevel = curLevel;
 			nextDecrease = getTimer() + spawnTick*1000;
 			nextSpawn = getTimer() + spawnDelay*1000;
-			
-			
+	
 			allEnemies = new Array();
-			blueEnemies = new Array();
-			greenEnemies = new Array();
-			yellowEnemies = new Array();
-			purpleEnemies = new Array();
 		}
 		
 		public function update():void{
@@ -58,8 +49,7 @@
 		
 		
 		//this funciton is now not void and must return an EnemySpawn
-		private function spawnLogic():void
-		{
+		private function spawnLogic():void {
 			//Math.random() * (max - min) + min;
 			var n : int;
 			var enemyType : int;
@@ -84,23 +74,21 @@
 				this.spawnFixUp(enemyTexture, n);
 				
 				newEnemy = new Enemy(enemyTexture, enemyType, canvas);
-				addToEnemyArray(newEnemy);
+				newEnemy.setTriggerProbability(Math.random());
+				allEnemies.push(newEnemy);
 				
 				nextSpawn = getTimer() + spawnDelay*1000;
 				
 			}
 			
 			//if curTime > nex decrease update it and decrease the spawn delay by 1
-			//when spawn delay reaches 2 we do not decrease it so that it is not OP
+			//when spawn delay reaches 1 we do not decrease it so that it is not OP
 			if (curTime > nextDecrease) {
 				nextDecrease = getTimer() * spawnTick*1000;
-				if (spawnDelay > 1) {
+				if (spawnDelay > 2) {
 					spawnDelay--;
-				} else {
-					spawnDelay -= 0.5;
 				}
 			}
-			
 		}
 		
 		private function spawnFixUp(enemy:Image2D, edge:int):void{
@@ -123,22 +111,6 @@
 				}
 		}
 		
-		private function addToEnemyArray(enemy:Enemy):void{
-			var enemyType:int = enemy.getEnemyType();
-			
-			if (enemyType == BLUE_ENEMY){
-				blueEnemies.push(enemy);
-			} else if (enemyType == GREEN_ENEMY) {
-				greenEnemies.push(enemy);
-			} else if (enemyType == YELLOW_ENEMY) {
-				yellowEnemies.push(enemy);
-			} else if (enemyType == PURPLE_ENEMY) {
-				purpleEnemies.push(enemy);
-			}
-			
-			allEnemies.push(enemy);
-		}
-		
 		public function enemyMovementUpdate() :void{
 		
 			var i:int = 0;
@@ -147,8 +119,29 @@
 			
 			for (i = 0; i < size; i++) {
 				curEnemy = allEnemies[i];
+				if (curEnemy.hasTriggered == false) {
+					curEnemy.checkToTrigger(Math.random());
+				}
 				curEnemy.move();
 			}
+		}
+		
+		public function removeEnemy(toRemove:Enemy):void{
+			var i:int = 0;
+			var size:int = allEnemies.length;
+			var newAllEnemiesArray:Array = new Array();
+			
+			for(i = 0; i < size; i++) {
+				if(allEnemies[i] != toRemove) {
+					newAllEnemiesArray.push(allEnemies[i]);
+				}
+			}
+			
+			allEnemies = newAllEnemiesArray;
+		} 
+		
+		public function getAllEnemies():Array{
+			return allEnemies;
 		}
 		
 
