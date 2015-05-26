@@ -182,7 +182,7 @@
 			
 			//sound stuff
 			myChannel = new SoundChannel();
-			myChannel = mainSong.play();
+			myChannel = mainSong.play(0, 99);
 		}
 		
 		//level's main loop

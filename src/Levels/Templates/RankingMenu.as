@@ -11,7 +11,6 @@
 		private var title:Image2D;
 		private var botBorder:Image2D;
 		private var backButton:Image2D;
-		private var message:Image2D;
 		
 		public function RankingMenu(engine:GameEngine) {
 			super(engine);
@@ -41,9 +40,7 @@
 			botBorder = instantiate("Bottom", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y));
 			botBorder.setPosition(new Vector2D(botBorder.getPosition().x, botBorder.getPosition().y - botBorder.getHeight()/2));
 			backButton = instantiate("Back", new Vector2D(canvas.dimensions.x/2, 11*canvas.dimensions.y/14));
-			message = instantiate("UnderConstruction", new Vector2D(canvas.dimensions.x/2, (canvas.dimensions.y - backButton.getHeight())/2));
-			//message.getData().height *= 2;
-			//message.getData().width *= 2;
+			instantiate("UnderConstruction", new Vector2D(canvas.dimensions.x/2, (canvas.dimensions.y - backButton.getHeight())/2));
 			
 			this.makeButton(backButton);
 		}
