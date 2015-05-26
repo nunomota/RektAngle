@@ -40,7 +40,7 @@
 			botBorder = instantiate("Bottom", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y));
 			botBorder.setPosition(new Vector2D(botBorder.getPosition().x, botBorder.getPosition().y - botBorder.getHeight()/2));
 			backButton = instantiate("Back", new Vector2D(canvas.dimensions.x/2, 11*canvas.dimensions.y/14));
-			instantiate("Help", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+			instantiate("Help", new Vector2D(canvas.dimensions.x/2, (canvas.dimensions.y - backButton.getHeight())/2));
 			
 			this.makeButton(backButton);
 		}
