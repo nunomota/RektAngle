@@ -11,6 +11,9 @@
 	import flash.utils.getTimer;
 	import Levels.Auxiliary.PlayerStats;
 	import Levels.Auxiliary.Ability;
+	import flash.media.Sound;
+	import flash.net.URLRequest;
+	import flash.media.SoundChannel;
 	
 	public class GameLevel extends Level {
 
@@ -62,6 +65,15 @@
 		
 		//AI related
 		private var aiHandler:AI;
+		
+		//Sound related
+		private var ability1Sound:Sound;
+		private var ability2Sound:Sound;
+		private var ability3Sound:Sound;
+		private var explosion:Sound;
+		private var gameOver:Sound;
+		private var mainSong:Sound;
+		private var myChannel:SoundChannel;
 		
 		public function GameLevel(engine:GameEngine) {
 			super(engine);
@@ -123,6 +135,15 @@
 			abilities[1] = new Ability("BlueAbility", 2, 50);
 			abilities[2] = new Ability("PurpleAbility", 50, 50);
 			
+			//sound setup
+			ability1Sound = new Sound(new URLRequest("../Resources/Sounds/Ability1.mp3"));			
+			ability2Sound = new Sound(new URLRequest("../Resources/Sounds/Ability2.mp3"));
+			ability3Sound = new Sound(new URLRequest("../Resources/Sounds/Ability3.mp3"));
+			explosion = new Sound(new URLRequest("../Resources/Sounds/Explosion.mp3"));
+			gameOver = new Sound(new URLRequest("../Resources/Sounds/GameOver.mp3"));
+			mainSong = new Sound(new URLRequest("../Resources/Sounds/MainSong.mp3"));
+			myChannel = new SoundChannel();
+			
 		}
 		
 		//called once, right after all assets are loaded
@@ -159,6 +180,9 @@
 			}
 			
 			aiHandler = new AI(canvas, this);
+			
+			//sound stuff
+			myChannel = mainSong.play();
 		}
 		
 		//level's main loop
@@ -341,6 +365,7 @@
 				targetAbility.player = player;
 				if (targetStats.spendEnergy(targetAbility.cost) == 0) {
 					if (targetAbility.name == "GreenAbility") {
+						ability1Sound.play();
 						var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 						abilityTexture.rotate(targetPlayer.getData().rotation);
 						var enemies:Array = filterCollisions(abilityTexture, checkCollisions(abilityTexture, null, "Enemy"));
@@ -351,11 +376,13 @@
 							blueAbilityEnabled[player-1] = false;
 							destroy(blueAbilityTexture[player-1], 0);
 						} else {
+							ability2Sound.play();
 							blueAbilityTexture[player-1] = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 							blueAbilityTexture[player-1].rotate(targetPlayer.getData().rotation);
 							blueAbilityEnabled[player-1] = true;
 						}
 					} else if (targetAbility.name == "PurpleAbility") {
+						ability3Sound.play();
 						var abilityTexture1:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 						abilityTexture1.rotate(targetPlayer.getData().rotation);
 						var enemies1:Array = filterCollisions(abilityTexture1, checkCollisions(abilityTexture1, null, "Enemy"));
@@ -409,6 +436,7 @@
 			var targetStats:PlayerStats = getPlayerStats(player);
 			if (enemyArray != null) {
 				GameEngine.debug.print("Enemies to explode: ".concat(enemyArray.length), 5);
+				explosion.play();
 				for (i = 0; i < enemyArray.length; i++) {
 					curEnemy = enemyArray[i];
 					curEnemyPos = curEnemy.getPosition();
@@ -427,6 +455,7 @@
 			var targetStats:PlayerStats = getPlayerStats(player);
 			if (enemyArray != null) {
 				GameEngine.debug.print("Enemies to absorb: ".concat(enemyArray.length), 5);
+				explosion.play();
 				for (i = 0; i < enemyArray.length; i++) {
 					curEnemy = enemyArray[i];
 					curEnemyPos = curEnemy.getPosition();
@@ -588,6 +617,8 @@
 			instantiate("TeleportWarning", new Vector2D(canvas.dimensions.x/2, topBorder.getPosition().y + topBorder.getHeight()/2));
 			instantiate("Board", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 			instantiate("GameOver", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+			gameOver.play();
+			myChannel.stop();
 		}
 		
 		//used to show the Pop-up

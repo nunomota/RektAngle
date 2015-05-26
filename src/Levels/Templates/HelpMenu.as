@@ -3,6 +3,8 @@
 	import Levels.*;
 	import GUI.Objects.Auxiliary.Vector2D;
 	import GUI.Objects.*;
+	import flash.media.Sound;
+	import flash.net.URLRequest;
 	
 	public class HelpMenu extends Level {
 
@@ -15,6 +17,8 @@
 		
 		private var helpBoard:Image2D;
 		private var displayingMore:Boolean = false;
+		
+		private var mouseClickSound:Sound;
 		
 		public function HelpMenu(engine:GameEngine) {
 			super(engine);
@@ -33,6 +37,7 @@
 			addTexture("../Resources/Textures/Menus/Buttons/Less.png");
 			addTexture("../Resources/Textures/Menus/Text/Help.png");
 			addTexture("../Resources/Textures/Menus/Text/MoreHelp.png");
+			mouseClickSound = new Sound(new URLRequest("../Resources/Sounds/MouseClick.mp3"));
 			buildAssets();
 		}
 		
@@ -62,6 +67,7 @@
 			if (backButton.getMouseClick()) {
 				return -1;
 			} else if (toggleButton.getMouseClick()) {
+				mouseClickSound.play();
 				if (!displayingMore) {
 					destroy(helpBoard, 0);
 					helpBoard = instantiate("MoreHelp", new Vector2D(canvas.dimensions.x/2, (canvas.dimensions.y - backButton.getHeight())/2));

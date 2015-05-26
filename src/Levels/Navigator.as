@@ -1,6 +1,10 @@
 ﻿package Levels {
 	
 	import Levels.Templates.*;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	import flash.net.URLRequest;
+
 	
 	public class Navigator {
 
@@ -17,6 +21,11 @@
 		
 		private var curLevelBehaviour:int;
 		
+		//sound stuff
+		private var mouseClickSound:Sound;
+		private var mainMenuSong:Sound;
+		private var myChannel:SoundChannel;
+		
 		public function Navigator(engine:GameEngine) {
 			this.gameEngine = engine;
 			this.init();
@@ -32,11 +41,21 @@
 			optionsMenu = new OptionsMenu(gameEngine);
 			helpMenu = new HelpMenu(gameEngine);
 			//gameLevel = new GameLevel(gameEngine);
+			
+			
 		}
 		
 		//used for value attribution
 		private function setup():void {
+			//sound setup
+			mouseClickSound = new Sound(new URLRequest("../Resources/Sounds/MouseClick.mp3"));
+			mainMenuSong = new Sound(new URLRequest("../Resources/Sounds/MainMenu.mp3"));
+			myChannel = new SoundChannel();
+			
 			curLevel = mainMenu;
+			
+			myChannel = mainMenuSong.play();
+		
 		}
 		
 		public function update():void {
@@ -68,10 +87,12 @@
 				} else if (curLevel == playMenu) {
 					switch(curLevelBehaviour) {
 						case 1:
+							myChannel.stop();
 							changeLevel((gameLevel = new GameLevel(gameEngine)));
 							gameLevel.setPlayerNumber(1);
 							break;
 						case 2:
+							myChannel.stop();
 							changeLevel((gameLevel = new GameLevel(gameEngine)));
 							gameLevel.setPlayerNumber(2);
 							break;
@@ -87,6 +108,7 @@
 		
 		//used to change the current level
 		private function changeLevel(targetLevel:Level):void {
+			mouseClickSound.play();
 			curLevel.hide();
 			curLevel = targetLevel;
 		}
