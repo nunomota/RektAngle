@@ -7,7 +7,7 @@
 		public var score:int = 0;
 		public var energy:int = 0;
 		private var rechargeDelay:Number = 0.2;		//in seconds
-		private var reloadDelay:Number = 1;
+		private var reloadDelay:Number = 0.2;
 		private var drainDelay:Number = 0.2;
 		
 		private var nextTick:Number;			//timer for energy recharge

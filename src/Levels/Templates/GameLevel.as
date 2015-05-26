@@ -97,7 +97,7 @@
 			player2EnergyDisplay = new Array();
 			
 			abilities = new Array();
-			abilities[0] = new Ability("GreenAbility", 0, 50);
+			abilities[0] = new Ability("GreenAbility", 50, 50);
 			abilities[1] = new Ability("BlueAbility", 2, 50);
 			//abilities[2] = new Ability();
 		}
@@ -296,6 +296,7 @@
 						abilityTexture.rotate(targetPlayer.getData().rotation);
 						var enemies:Array = checkCollisions(abilityTexture, null, "Enemy");
 						enemies = filterCollisions(abilityTexture, enemies);
+						explodeEnemies(enemies);
 						destroy(abilityTexture, 1);
 					} else if (targetAbility.name == "BlueAbility") {
 						if (blueAbilityEnabled[player-1]) {
@@ -344,6 +345,16 @@
 				return filteredCollisions;
 			}
 			return null;
+		}
+		
+		//used to destroy the enemies hit
+		private function explodeEnemies(enemies:Array):void {
+			var i:int;
+			var curEnemy:Image2D;
+			for (i = 0; i < enemies.length; i++) {
+				curEnemy = enemies[i];
+				destroy(curEnemy, 0);
+			}
 		}
 
 		//function to set number of players
