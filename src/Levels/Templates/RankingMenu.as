@@ -3,6 +3,11 @@
 	import Levels.*;
 	import GUI.Objects.Auxiliary.Vector2D;
 	import GUI.Objects.*;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.events.*;
+
+	import Debug.*;
 	
 	public class RankingMenu extends Level {
 
@@ -25,7 +30,6 @@
 			addTexture("../Resources/Textures/Menus/Titles/RankingTitle.png");
 			addTexture("../Resources/Textures/Menus/Borders/Bottom.png");
 			addTexture("../Resources/Textures/Menus/Buttons/Back.png");
-			addTexture("../Resources/Textures/Menus/Props/UnderConstruction.png");
 			buildAssets();
 		}
 		
@@ -40,9 +44,13 @@
 			botBorder = instantiate("Bottom", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y));
 			botBorder.setPosition(new Vector2D(botBorder.getPosition().x, botBorder.getPosition().y - botBorder.getHeight()/2));
 			backButton = instantiate("Back", new Vector2D(canvas.dimensions.x/2, 11*canvas.dimensions.y/14));
-			instantiate("UnderConstruction", new Vector2D(canvas.dimensions.x/2, (canvas.dimensions.y - backButton.getHeight())/2));
 			
 			this.makeButton(backButton);
+
+			showHighScoresReady();
+
+
+
 		}
 		
 		//level's main loop
@@ -57,6 +65,37 @@
 			return 0;
 		}
 
+		function showHighScoresReady():void   
+		{  
+
+		    var ldr:URLLoader = new URLLoader();      
+		    ldr.load(new URLRequest("http://127.0.0.1/getScores.php"));
+		    var result:String = ldr.data;
+				trace(result);  
+		    ldr.addEventListener(IOErrorEvent.IO_ERROR, onError);
+
+		 
+			function onError(e:IOErrorEvent):void {
+			ldr.load(new URLRequest("scores.txt"));
+
+			ldr.addEventListener(Event.COMPLETE, onLoaded);
+
+			function onLoaded(e:Event):void {
+				var result:String = e.target.data;
+				var strings:Array = result.split("#");
+				trace(strings[0]); 
+				trace(strings[1]);
+				trace(strings[2]); 
+				trace(strings[3]);
+				trace(strings[4]); 
+			
+
+
+			}	
+
+		}  
+
 	}
+}
 	
 }
