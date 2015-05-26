@@ -84,6 +84,7 @@
 				this.spawnFixUp(enemyTexture, n);
 				
 				newEnemy = new Enemy(enemyTexture, enemyType, canvas);
+				newEnemy.setTriggerProbability(Math.random());
 				addToEnemyArray(newEnemy);
 				
 				nextSpawn = getTimer() + spawnDelay*1000;
@@ -91,16 +92,12 @@
 			}
 			
 			//if curTime > nex decrease update it and decrease the spawn delay by 1
-			//when spawn delay reaches 2 we do not decrease it so that it is not OP
+			//when spawn delay reaches 1 we do not decrease it so that it is not OP
 			if (curTime > nextDecrease) {
 				nextDecrease = getTimer() * spawnTick*1000;
 				if (spawnDelay > 1) {
 					spawnDelay--;
-				} else {
-					spawnDelay -= 0.5;
 				}
-			}
-			
 		}
 		
 		private function spawnFixUp(enemy:Image2D, edge:int):void{
@@ -149,6 +146,73 @@
 				curEnemy = allEnemies[i];
 				curEnemy.move();
 			}
+		}
+		
+		public function removeEnemy(toRemove:Enemy):void{
+			var i:int = 0;
+			var size:int = allEnemies.length;
+			var newAllEnemiesArray:Array = new Array();
+			
+			for(i = 0; i < size; i++) {
+				if(allEnemies[i] != toRemove) {
+					newAllEnemiesArray.push(allEnemies[i]);
+				}
+			}
+			
+			allEnemies = newAllEnemiesArray;
+			
+			var newSpecificArray:Array = new Array();
+			var enemyType:int = toRemove.getEnemyType();
+			
+			if (enemyType == BLUE_ENEMY) {
+				size = blueEnemies.length;
+				
+				for(i = 0; i < size; i++) {
+					if(blueEnemies[i] != toRemove) {
+					newSpecificArray.push(blueEnemies[i]);
+					}
+				}
+				blueEnemies = newSpecificArray;
+				
+			} else if (enemyType == GREEN_ENEMY) {
+				
+				size = greenEnemies.length;
+				
+				for(i = 0; i < size; i++) {
+					if(greenEnemies[i] != toRemove) {
+					newSpecificArray.push(greenEnemies[i]);
+					}
+				}
+				greenEnemies = newSpecificArray;
+				
+			} else if(enemyType == YELLOW_ENEMY) {
+				
+				size = yellowEnemies.length;
+				
+				for(i = 0; i < size; i++) {
+					if(yellowEnemies[i] != toRemove) {
+					newSpecificArray.push(yellowEnemies[i]);
+					}
+				}
+				yellowEnemies = newSpecificArray;
+				
+			} else if(enemyType == PURPLE_ENEMY) {
+				
+				size = purpleEnemies.length;
+				
+				for(i = 0; i < size; i++) {
+					if(purpleEnemies[i] != toRemove) {
+					newSpecificArray.push(purpleEnemies[i]);
+					}
+				}
+				purpleEnemies = newSpecificArray;
+				
+			}
+			
+		} 
+		
+		public function getAllEnemies():Array{
+			return allEnemies;
 		}
 		
 
