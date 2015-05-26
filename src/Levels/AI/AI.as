@@ -38,8 +38,7 @@
 			this.curLevel = curLevel;
 			nextDecrease = getTimer() + spawnTick*1000;
 			nextSpawn = getTimer() + spawnDelay*1000;
-			
-			
+	
 			allEnemies = new Array();
 		}
 		
@@ -76,7 +75,7 @@
 				
 				newEnemy = new Enemy(enemyTexture, enemyType, canvas);
 				newEnemy.setTriggerProbability(Math.random());
-				addToEnemyArray(newEnemy);
+				allEnemies.push(newEnemy);
 				
 				nextSpawn = getTimer() + spawnDelay*1000;
 				
@@ -86,7 +85,7 @@
 			//when spawn delay reaches 1 we do not decrease it so that it is not OP
 			if (curTime > nextDecrease) {
 				nextDecrease = getTimer() * spawnTick*1000;
-				if (spawnDelay > 1) {
+				if (spawnDelay > 2) {
 					spawnDelay--;
 				}
 			}
@@ -110,22 +109,6 @@
 				} else if (edge == 3) {
 					enemy.setPosition(new Vector2D(int(Math.random()*(canvas.dimensions.y - (enemy.getHeight()/2))), canvas.dimensions.x + enemy.getWidth()));
 				}
-		}
-		
-		private function addToEnemyArray(enemy:Enemy):void{
-			var enemyType:int = enemy.getEnemyType();
-			
-			if (enemyType == BLUE_ENEMY){
-				blueEnemies.push(enemy);
-			} else if (enemyType == GREEN_ENEMY) {
-				greenEnemies.push(enemy);
-			} else if (enemyType == YELLOW_ENEMY) {
-				yellowEnemies.push(enemy);
-			} else if (enemyType == PURPLE_ENEMY) {
-				purpleEnemies.push(enemy);
-			}
-			
-			allEnemies.push(enemy);
 		}
 		
 		public function enemyMovementUpdate() :void{
