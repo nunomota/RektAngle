@@ -57,6 +57,14 @@
 			return image;
 		}
 		
+		//used to draw imported textures
+		protected function requestDraw(image:Image2D)void {
+			imagesDrawn[imagesDrawn.length] = image;
+			if (isShowing) {
+				gameEngine.stage.addChild(image.getData());
+			}
+		}
+		
 		//used by child Objects to populate the Level's assets
 		protected function setup():void {
 			
