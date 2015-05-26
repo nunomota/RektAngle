@@ -197,11 +197,25 @@
 			blueAbilityDrain();
 			player1Stats.update();
 			updateEnergy(1);
+			handleAICollisions(1);
 			if (nPlayers != 1) {
 				player2Stats.update();
 				updateEnergy(2);
+				handleAICollisions(2);
 			}
 			useAbilities();
+		}
+		
+		private function handleAICollisions(player:int): void {
+			var targetPlayer:Image2D = getPlayer(player);
+			var enemies:Array = filterCollisions(targetPlayer, checkCollisions(targetPlayer, null, "Enemy"));
+			if (enemies != null) {
+				var nCollisions:int = enemies.length;
+				explodeEnemies(enemies, player);
+				if (nCollisions > 0 && !blueAbilityEnabled[player-1]) {
+					decreaseLifePoints();
+				}
+			}
 		}
 		
 		private function animations():void {
