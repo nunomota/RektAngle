@@ -58,8 +58,7 @@
 		
 		
 		//this funciton is now not void and must return an EnemySpawn
-		private function spawnLogic():void
-		{
+		private function spawnLogic():void {
 			//Math.random() * (max - min) + min;
 			var n : int;
 			var enemyType : int;
@@ -98,6 +97,7 @@
 				if (spawnDelay > 1) {
 					spawnDelay--;
 				}
+			}
 		}
 		
 		private function spawnFixUp(enemy:Image2D, edge:int):void{
