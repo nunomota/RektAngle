@@ -11,6 +11,7 @@
 	
 
 	import Debug.*;
+	import Handlers.HighScore.DataHandler;
 	
 	public class RankingMenu extends Level {
 
@@ -19,6 +20,10 @@
 		private var title:Image2D;
 		private var botBorder:Image2D;
 		private var backButton:Image2D;
+		
+		private var hasRetrievedHighScores:Boolean = false;
+		private var highScoresHandler:DataHandler;
+		private var highScores:Array;
 		
 		public function RankingMenu(engine:GameEngine) {
 			super(engine);
@@ -49,17 +54,20 @@
 			backButton = instantiate("Back", new Vector2D(canvas.dimensions.x/2, 11*canvas.dimensions.y/14));
 			
 			this.makeButton(backButton);
-
-			showHighScoresReady();
-
-
-
+			highScoresHandler = new DataHandler();
 		}
 		
 		//level's main loop
 		public override function update():int {
 			super.update();
 			if (!assetsLoaded) {return 0;}
+			
+			if (!hasRetrievedHighScores) {
+				if ((highScores = highScoresHandler.getHighscores()) != null) {
+					hasRetrievedHighScores = true;
+					displayScores();
+				}
+			}
 			
 			if (backButton.getMouseClick()) {
 				return -1;
@@ -68,6 +76,9 @@
 			return 0;
 		}
 
+		private function displayScores():void {
+			
+		}
 	
 	}
 	
