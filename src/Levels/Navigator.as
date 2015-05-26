@@ -109,6 +109,9 @@
 		//used to change the current level
 		private function changeLevel(targetLevel:Level):void {
 			mouseClickSound.play();
+			if (curLevel == gameLevel) {
+				myChannel = mainMenuSong.play();
+			}
 			curLevel.hide();
 			curLevel = targetLevel;
 		}

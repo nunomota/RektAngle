@@ -142,7 +142,6 @@
 			explosion = new Sound(new URLRequest("../Resources/Sounds/Explosion.mp3"));
 			gameOver = new Sound(new URLRequest("../Resources/Sounds/GameOver.mp3"));
 			mainSong = new Sound(new URLRequest("../Resources/Sounds/MainSong.mp3"));
-			myChannel = new SoundChannel();
 			
 		}
 		
@@ -182,6 +181,7 @@
 			aiHandler = new AI(canvas, this);
 			
 			//sound stuff
+			myChannel = new SoundChannel();
 			myChannel = mainSong.play();
 		}
 		
@@ -268,6 +268,7 @@
 				isPaused = false;
 			} else if (popExit.getMouseClick()) {
 				hidePopup();
+				myChannel.stop();
 				return -1;
 			}
 			return 0;
