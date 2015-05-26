@@ -5,6 +5,7 @@
 	import GUI.Objects.*;
 	import Handlers.Controls.*;
 	import Levels.Physics.*;
+	import Levels.AI.*;
 	
 	import flash.ui.Keyboard;
 	import flash.utils.getTimer;
@@ -54,12 +55,13 @@
 		private var nextCatch:Number = 0;
 		private var catchDelay:Number = 0.2;
 		
-		private var enemy:Image2D;		//TEST
-		
 		private var curLives:int;
 		private var timeOfLoss:Number;
 		private var timeOfTeleport:Number;
 		private var menuTeleportDelay:Number = 8;
+		
+		//AI related
+		private var aiHandler:AI;
 		
 		public function GameLevel(engine:GameEngine) {
 			super(engine);
@@ -93,7 +95,10 @@
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
 			addTexture("../Resources/Textures/InGame/Active/GreenAbility.png");
 			addTexture("../Resources/Textures/InGame/Active/BlueAbility.png");
-			addTexture("../Resources/Textures/InGame/Active/AI/GreenEnemy.png");		//TEST
+			addTexture("../Resources/Textures/InGame/Active/AI/GreenEnemy.png");
+			addTexture("../Resources/Textures/InGame/Active/AI/BlueEnemy.png");
+			addTexture("../Resources/Textures/InGame/Active/AI/YellowEnemy.png");
+			addTexture("../Resources/Textures/InGame/Active/AI/PurpleEnemy.png");
 			
 			addTexture("../Resources/Textures/InGame/Active/Explosion_1.png");
 			var i:int;
@@ -114,6 +119,8 @@
 			abilities[0] = new Ability("GreenAbility", 30, 50);
 			abilities[1] = new Ability("BlueAbility", 2, 50);
 			//abilities[2] = new Ability();
+			
+			
 		}
 		
 		//called once, right after all assets are loaded
@@ -149,8 +156,7 @@
 				updateDisplays(2);
 			}
 			
-			enemy = instantiate("GreenEnemy", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/4));		//TEST
-			enemy.setTag("Enemy");
+			aiHandler = new AI(canvas, this);
 		}
 		
 		//level's main loop
@@ -162,6 +168,7 @@
 				handleEscPress();
 				if (!isPaused) {
 					playerUpdate();
+					aiHandler.update();
 					animations();
 				} else {
 					return popupUpdate();

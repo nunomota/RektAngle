@@ -67,21 +67,21 @@
 		----------- Getters & Setters ----------
 		--------------------------------------*/
 		
-		public function setX(newX:int):void {
+		public function setX(newX:Number):void {
 			imageData.x += newX - position.x;
 			position.x = newX;
 		}
 		
-		public function getX():int {
+		public function getX():Number {
 			return position.x;
 		}
 		
-		public function setY(newY:int):void {
+		public function setY(newY:Number):void {
 			imageData.y += newY - position.y;
 			position.y = newY;
 		}
 		
-		public function getY():int {
+		public function getY():Number {
 			return position.y;
 		}
 		

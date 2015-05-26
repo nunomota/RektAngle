@@ -11,6 +11,7 @@
 		private var title:Image2D;
 		private var botBorder:Image2D;
 		private var backButton:Image2D;
+		private var message:Image2D;
 		
 		public function RankingMenu(engine:GameEngine) {
 			super(engine);
@@ -25,6 +26,7 @@
 			addTexture("../Resources/Textures/Menus/Titles/RankingTitle.png");
 			addTexture("../Resources/Textures/Menus/Borders/Bottom.png");
 			addTexture("../Resources/Textures/Menus/Buttons/Back.png");
+			addTexture("../Resources/Textures/Menus/Props/UnderConstruction.png");
 			buildAssets();
 		}
 		
@@ -39,6 +41,9 @@
 			botBorder = instantiate("Bottom", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y));
 			botBorder.setPosition(new Vector2D(botBorder.getPosition().x, botBorder.getPosition().y - botBorder.getHeight()/2));
 			backButton = instantiate("Back", new Vector2D(canvas.dimensions.x/2, 11*canvas.dimensions.y/14));
+			message = instantiate("UnderConstruction", new Vector2D(canvas.dimensions.x/2, (canvas.dimensions.y - backButton.getHeight())/2));
+			//message.getData().height *= 2;
+			//message.getData().width *= 2;
 			
 			this.makeButton(backButton);
 		}
