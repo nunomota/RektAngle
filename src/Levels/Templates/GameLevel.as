@@ -82,6 +82,8 @@
 			addTexture("../Resources/Textures/InGame/Active/GreenAbility.png");
 			addTexture("../Resources/Textures/InGame/Active/BlueAbility.png");
 			addTexture("../Resources/Textures/InGame/Active/AI/GreenEnemy.png");		//TEST
+			
+			addTexture("../Resources/Textures/InGame/Active/Explosion_1.png");
 			var i:int;
 			for (i = 0; i < 10; i++) {
 				addTexture("../Resources/Textures/InGame/Numbers/".concat(i, ".png"));
@@ -350,11 +352,14 @@
 		private function explodeEnemies(enemyArray:Array):void {
 			var i:int;
 			var curEnemy:Image2D;
+			var curEnemyPos:Vector2D;
 			if (enemyArray != null) {
 				GameEngine.debug.print("Enemies to explode: ".concat(enemyArray.length), 5);
 				for (i = 0; i < enemyArray.length; i++) {
 					curEnemy = enemyArray[i];
+					curEnemyPos = curEnemy.getPosition();
 					destroy(curEnemy, 0);
+					destroy(instantiate("Explosion_1", curEnemyPos), 2);
 				}
 			}
 		}
