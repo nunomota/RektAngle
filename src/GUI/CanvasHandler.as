@@ -90,8 +90,8 @@
 		
 		//function used to handle errors while reading images
 		private function loadingError(event:IOErrorEvent):void {
-			GameEngine.debug.print("Problem loading image: ".concat(event.target), 3);
 			var loader:ImageLoader = getLoaderFromEvent(event);
+			GameEngine.debug.print("Problem loading image: ".concat(loader.targetPath), 3);
 			removeListeners(loader);
 		}
 		

@@ -39,7 +39,6 @@
 		
 		//returns an array where all vertices come in increasing distance to target point
 		private static function getNearestVertices(sourceVertices:Array, targetObject:Image2D):Array {
-			//TODO increase sourceVertices coordinates according to targetObject.width/2, so that they collide on proximity and not on overlap
 			var i:int;
 			var j:int;
 			var sortedArray:Array = new Array(sourceVertices.length);

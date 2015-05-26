@@ -44,6 +44,8 @@
 		private var player2EnergyDisplay:Array;
 		
 		private var abilities:Array;
+		private var blueAbilityTexture:Array = new Array(2);
+		private var blueAbilityEnabled:Array = new Array(false, false);
 		
 		private var isPaused:Boolean = false;
 		
@@ -77,7 +79,8 @@
 			addTexture("../Resources/Textures/InGame/Active/Core.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg1.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
-			addTexture("../Resources/Textures/InGame/Active/GreenRay.png");
+			addTexture("../Resources/Textures/InGame/Active/GreenAbility.png");
+			addTexture("../Resources/Textures/InGame/Active/BlueAbility.png");
 			addTexture("../Resources/Textures/InGame/Active/AI/GreenEnemy.png");		//TEST
 			var i:int;
 			for (i = 0; i < 10; i++) {
@@ -94,8 +97,8 @@
 			player2EnergyDisplay = new Array();
 			
 			abilities = new Array();
-			abilities[0] = new Ability("GreenRay", 0, 50);
-			//abilities[1] = new Ability();
+			abilities[0] = new Ability("GreenAbility", 0, 50);
+			abilities[1] = new Ability("BlueAbility", 2, 50);
 			//abilities[2] = new Ability();
 		}
 		
@@ -178,6 +181,7 @@
 		
 		private function playerUpdate():void {
 			movePlayers();
+			blueAbilityDrain();
 			player1Stats.update();
 			updateEnergy(1);
 			if (nPlayers != 1) {
@@ -200,21 +204,51 @@
 			if (nPlayers == 1) {
 				if (gameEngine.eventHandler.getKeyDown(PlayerControls.singlePlayer.left)) {
 					player1.rotate(-ROT_SPEED);
+					blueAbilityUpdate(1);
 				} else if (gameEngine.eventHandler.getKeyDown(PlayerControls.singlePlayer.right)) {
 					player1.rotate(ROT_SPEED);
+					blueAbilityUpdate(1);
 				}
 			} else {
 				//Move Player1
 				if (gameEngine.eventHandler.getKeyDown(PlayerControls.multiPlayer1.left)) {
 					player1.rotate(-ROT_SPEED);
+					blueAbilityUpdate(1);
 				} else if (gameEngine.eventHandler.getKeyDown(PlayerControls.multiPlayer1.right)) {
 					player1.rotate(ROT_SPEED);
+					blueAbilityUpdate(1);
 				}
 				//Move player2
 				if (gameEngine.eventHandler.getKeyDown(PlayerControls.multiPlayer2.left)) {
 					player2.rotate(-ROT_SPEED);
+					blueAbilityUpdate(2);
 				} else if (gameEngine.eventHandler.getKeyDown(PlayerControls.multiPlayer2.right)) {
 					player2.rotate(ROT_SPEED);
+					blueAbilityUpdate(2);
+				}
+			}
+		}
+		
+		private function blueAbilityUpdate(player:int):void {
+			//update blue ability according to player
+			var i:int;
+			var targetPlayer:Image2D = getPlayer(player);
+			if (blueAbilityEnabled[player-1]) {
+				targetPlayer = getPlayer(player);
+				blueAbilityTexture[player-1].rotate(targetPlayer.getData().rotation - blueAbilityTexture[player-1].getData().rotation);
+			}
+		}
+		
+		private function blueAbilityDrain():void {
+			var i:int;
+			var targetStats:PlayerStats;
+			for (i = 0; i < blueAbilityEnabled.length; i++) {
+				if (blueAbilityEnabled[i]) {
+					targetStats = getPlayerStats(i+1);
+					if (targetStats.drainEnergy(abilities[1].cost) != 0) {
+						destroy(blueAbilityTexture[i], 0);
+						blueAbilityEnabled[i] = false;
+					}
 				}
 			}
 		}
@@ -254,13 +288,25 @@
 			var targetAbility:Ability = abilities[ability-1];
 			
 			if (targetStats.hasReloaded()) {
+				GameEngine.debug.print("Player using ability ".concat(ability), 0);
+				targetAbility.player = player;
 				if (targetStats.spendEnergy(targetAbility.cost) == 0) {
-					GameEngine.debug.print("Player using ability ".concat(ability), 0);
-					var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
-					abilityTexture.rotate(targetPlayer.getData().rotation);
-					var enemies:Array = checkCollisions(abilityTexture, null, "Enemy");
-					enemies = filterCollisions(abilityTexture, enemies);
-					destroy(abilityTexture, 1);
+					if (targetAbility.name == "GreenAbility") {
+						var abilityTexture:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+						abilityTexture.rotate(targetPlayer.getData().rotation);
+						var enemies:Array = checkCollisions(abilityTexture, null, "Enemy");
+						enemies = filterCollisions(abilityTexture, enemies);
+						destroy(abilityTexture, 1);
+					} else if (targetAbility.name == "BlueAbility") {
+						if (blueAbilityEnabled[player-1]) {
+							blueAbilityEnabled[player-1] = false;
+							destroy(blueAbilityTexture[player-1], 0);
+						} else {
+							blueAbilityTexture[player-1] = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+							blueAbilityTexture[player-1].rotate(targetPlayer.getData().rotation);
+							blueAbilityEnabled[player-1] = true;
+						}
+					}
 				} else {
 					if (player == 1) {
 						destroy(instantiate("Warning", new Vector2D(canvas.dimensions.x/2, topBorder.getPosition().y + topBorder.getHeight()/2)), 2);

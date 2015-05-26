@@ -8,13 +8,16 @@
 		public var energy:int = 0;
 		private var rechargeDelay:Number = 0.2;		//in seconds
 		private var reloadDelay:Number = 1;
+		private var drainDelay:Number = 0.2;
 		
-		private var nextTick:Number;
-		private var nextShot:Number = 0;
+		private var nextTick:Number;			//timer for energy recharge
+		private var nextShot:Number = 0;		//timer for weapon reload
+		private var nextDrain:Number = 0;		//timer for energy drain
 		
 		public function PlayerStats() {
 			nextTick = getTimer() + rechargeDelay*1000;
 			nextShot = getTimer() + reloadDelay*1000;
+			nextDrain = getTimer() + drainDelay*1000;
 		}
 		
 		public function addPoints(points:int):void {
@@ -52,6 +55,15 @@
 			} else {
 				energy = 100;
 			}
+		}
+		
+		public function drainEnergy(energyDrained:int):int {
+			var curTime:Number = getTimer();
+			if (curTime >= nextDrain) {
+				nextDrain = curTime+drainDelay*1000;
+				return spendEnergy(energyDrained);
+			}
+			return 0;
 		}
 
 	}
