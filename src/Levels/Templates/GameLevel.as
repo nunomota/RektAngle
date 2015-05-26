@@ -84,7 +84,11 @@
 			addTexture("../Resources/Textures/InGame/Popup/Board.png");
 			addTexture("../Resources/Textures/InGame/Popup/TeleportWarning.png");
 			addTexture("../Resources/Textures/InGame/Popup/GameOver.png");
-			addTexture("../Resources/Textures/InGame/Active/Core.png");
+			addTexture("../Resources/Textures/InGame/Active/Core4.png");
+			addTexture("../Resources/Textures/InGame/Active/Core3.png");
+			addTexture("../Resources/Textures/InGame/Active/Core2.png");
+			addTexture("../Resources/Textures/InGame/Active/Core1.png");
+			addTexture("../Resources/Textures/InGame/Active/Core0.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg1.png");
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
 			addTexture("../Resources/Textures/InGame/Active/GreenAbility.png");
@@ -130,7 +134,7 @@
 			corebg1.getData().height /= 1.2;
 			corebg2.rotate(180);
 			corebg1.rotate(180);
-			core = instantiate("Core", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+			core = instantiate("Core4", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 			
 			player1 = instantiate("Player_1", new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
 			playerSymbol1 = instantiate("Player_1_symbol", new Vector2D(canvas.dimensions.x, 0));
@@ -157,7 +161,6 @@
 			if (curLives > 0) {
 				handleEscPress();
 				if (!isPaused) {
-					decreaseLifePoints();
 					playerUpdate();
 					animations();
 				} else {
@@ -560,11 +563,22 @@
 		//used to decrease the current life points
 		private function decreaseLifePoints():void {
 			this.curLives--;
+			updateCore();
 			if (curLives == 0) {
 				showGameOver();
 				timeOfLoss = getTimer();
 				timeOfTeleport = timeOfLoss + menuTeleportDelay*1000;
 			}
+		}
+		
+		//used to change core's texture
+		private function updateCore():void {
+			var corePosition:Vector2D = core.getPosition();
+			var coreRotation:Number = core.getData().rotation;
+			
+			destroy(core, 0);
+			core = instantiate("Core".concat(curLives), corePosition);
+			core.rotate(coreRotation);
 		}
 	}
 	
