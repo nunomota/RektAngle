@@ -14,6 +14,8 @@
 		private var nextShot:Number = 0;		//timer for weapon reload
 		private var nextDrain:Number = 0;		//timer for energy drain
 		
+		private var energyAbsortion:int = 10;
+		
 		public function PlayerStats() {
 			nextTick = getTimer() + rechargeDelay*1000;
 			nextShot = getTimer() + reloadDelay*1000;
@@ -64,6 +66,13 @@
 				return spendEnergy(energyDrained);
 			}
 			return 0;
+		}
+		
+		public function absorbEnergy():void {
+			this.energy += energyAbsortion;
+			if (this.energy > 100) {
+				this.energy = 100;
+			}
 		}
 
 	}

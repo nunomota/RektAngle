@@ -95,10 +95,13 @@
 			addTexture("../Resources/Textures/InGame/Active/Corebg2.png");
 			addTexture("../Resources/Textures/InGame/Active/GreenAbility.png");
 			addTexture("../Resources/Textures/InGame/Active/BlueAbility.png");
+			addTexture("../Resources/Textures/InGame/Active/PurpleAbility.png");
+			addTexture("../Resources/Textures/InGame/Active/Plus.png");
 			addTexture("../Resources/Textures/InGame/Active/AI/GreenEnemy.png");
 			addTexture("../Resources/Textures/InGame/Active/AI/BlueEnemy.png");
 			addTexture("../Resources/Textures/InGame/Active/AI/YellowEnemy.png");
 			addTexture("../Resources/Textures/InGame/Active/AI/PurpleEnemy.png");
+			
 			
 			addTexture("../Resources/Textures/InGame/Active/Explosion_1.png");
 			var i:int;
@@ -118,8 +121,7 @@
 			abilities = new Array();
 			abilities[0] = new Ability("GreenAbility", 30, 50);
 			abilities[1] = new Ability("BlueAbility", 2, 50);
-			//abilities[2] = new Ability();
-			
+			abilities[2] = new Ability("PurpleAbility", 40, 50);
 			
 		}
 		
@@ -353,6 +355,12 @@
 							blueAbilityTexture[player-1].rotate(targetPlayer.getData().rotation);
 							blueAbilityEnabled[player-1] = true;
 						}
+					} else if (targetAbility.name == "PurpleAbility") {
+						var abilityTexture1:Image2D = instantiate(targetAbility.name, new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/2));
+						abilityTexture1.rotate(targetPlayer.getData().rotation);
+						var enemies1:Array = filterCollisions(abilityTexture1, checkCollisions(abilityTexture1, null, "Enemy"));
+						absorbEnemies(enemies1, player);
+						destroy(abilityTexture1, 1);
 					}
 				} else {
 					if (player == 1) {
@@ -406,6 +414,25 @@
 					curEnemyPos = curEnemy.getPosition();
 					destroy(curEnemy, 0);
 					destroy(instantiate("Explosion_1", curEnemyPos), 2);
+					addPoints(player, 50);
+				}
+			}
+		}
+		
+		//used to absorb the enemies hit
+		private function absorbEnemies(enemyArray:Array, player:int):void {
+			var i:int;
+			var curEnemy:Image2D;
+			var curEnemyPos:Vector2D;
+			var targetStats:PlayerStats = getPlayerStats(player);
+			if (enemyArray != null) {
+				GameEngine.debug.print("Enemies to absorb: ".concat(enemyArray.length), 5);
+				for (i = 0; i < enemyArray.length; i++) {
+					curEnemy = enemyArray[i];
+					curEnemyPos = curEnemy.getPosition();
+					destroy(curEnemy, 0);
+					destroy(instantiate("Plus", curEnemyPos), 2);
+					targetStats.absorbEnergy();
 					addPoints(player, 50);
 				}
 			}
