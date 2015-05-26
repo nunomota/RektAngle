@@ -121,7 +121,7 @@
 			abilities = new Array();
 			abilities[0] = new Ability("GreenAbility", 30, 50);
 			abilities[1] = new Ability("BlueAbility", 2, 50);
-			abilities[2] = new Ability("PurpleAbility", 40, 50);
+			abilities[2] = new Ability("PurpleAbility", 50, 50);
 			
 		}
 		
