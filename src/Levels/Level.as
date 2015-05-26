@@ -8,7 +8,7 @@
 	
 	public class Level {
 
-		private var gameEngine:GameEngine;
+		protected var gameEngine:GameEngine;
 		
 		protected var canvas:CanvasHandler;
 		private var imagesDrawn:Array;

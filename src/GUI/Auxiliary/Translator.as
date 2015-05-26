@@ -29,7 +29,7 @@
 			var i:int;
 			for (i = 0; i < string.length; i++) {
 				var curChar:String = string.charAt(i);
-				if (charAt(i) == " ") {
+				if (curChar == " ") {
 					array[array.length] = instantiate("space", new Vector2D(0, 0));
 				} else {
 					array[array.length] = instantiate(string.charAt(i), new Vector2D(0, 0));

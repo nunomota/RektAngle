@@ -12,6 +12,8 @@
 
 	import Debug.*;
 	import Handlers.HighScore.DataHandler;
+	import GUI.Auxiliary.Translator;
+	import flash.geom.Vector3D;
 	
 	public class RankingMenu extends Level {
 
@@ -24,6 +26,7 @@
 		private var hasRetrievedHighScores:Boolean = false;
 		private var highScoresHandler:DataHandler;
 		private var highScores:Array;
+		private var translator:Translator;
 		
 		public function RankingMenu(engine:GameEngine) {
 			super(engine);
@@ -55,6 +58,7 @@
 			
 			this.makeButton(backButton);
 			highScoresHandler = new DataHandler();
+			translator = new Translator(gameEngine);
 		}
 		
 		//level's main loop
@@ -77,7 +81,25 @@
 		}
 
 		private function displayScores():void {
-			
+			var i:int;
+			var j:int;
+			var curScore:Array;
+			var initPos:Vector2D = new Vector2D(canvas.dimensions.x/10, canvas.dimensions.y/10);
+			var posOffset:Vector2D = new Vector2D(canvas.dimensions.x/2, canvas.dimensions.y/5);
+			for (i = 0; i < 2; i++) {
+				for (j = 0; j < 4; j++) {
+					var index:int = i*3+j;
+					if (index < highScores.length) {
+						curScore = translator.getPixelString(highScores[index]);
+						var z:int;
+						for (z = 0; z < curScore.length; z++) {
+							this.requestDraw(curScore[z]);
+						}
+					} else {
+						return;
+					}
+				}
+			}
 		}
 	
 	}

@@ -17,7 +17,6 @@
 	
 	public class GameLevel extends Level {
 
-		private var gameEngine:GameEngine;
 		private var MAX_LIVES:int = 4;
 		
 		private var background:Image2D;
