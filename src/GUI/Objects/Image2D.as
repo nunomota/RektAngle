@@ -17,8 +17,7 @@
 		private var initDimensions:Vector2D;
 		
 		private var wasClicked:Boolean = false;
-		
-		private var lastRotation:Number = 190;
+		public var isDisposable:Boolean = false;
 
 		public function Image2D(data:Bitmap, pos:Vector2D) {
 			this.imageData = data;

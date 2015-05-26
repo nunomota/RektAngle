@@ -140,13 +140,25 @@
 		
 		private function cleanUp():void {
 			canvas.clear();
-			//disposables.length = 0;
 		}
 		
 		protected function destroy(image:Image2D, delay:Number):void {
 			var disposable:Disposable = new Disposable(image, delay);
 			GameEngine.debug.print("Disposing of object in ".concat(delay, " seconds"), 0);
+			image.isDisposable = true;
+			undrawImage();
 			disposables[disposables.length] = disposable;
+		}
+		
+		private function undrawImage():void {
+			var i:int;
+			var newImagesDrawn:Array = new Array();
+			for (i = 0; i < imagesDrawn.length; i++) {
+				if (!imagesDrawn[i].isDisposable) {
+					newImagesDrawn[newImagesDrawn.length] = imagesDrawn[i];
+				}
+			}
+			imagesDrawn = newImagesDrawn;
 		}
 		
 		private function clearDisposables():void {
@@ -177,8 +189,8 @@
 			var i:int;
 			for (i = 0; i < imagesDrawn.length; i++) {
 				curImage = imagesDrawn[i];
-				if (source != curImage) {		//if it is not itself
-					if (targetName != null || targetTag != null) {		//if I wanna search by name or tag
+				if (source != curImage && !curImage.isDisposable) {	//if it is not itself (and is not being disposed)
+					if (targetName != null || targetTag != null) {						//if I wanna search by name or tag
 						if (targetName != null && curImage.getName() == targetName) {		//if name matches
 							possibleObjects[possibleObjects.length] = curImage;
 						} else if (targetTag != null && curImage.getTag() == targetTag) {	//if tag matches
