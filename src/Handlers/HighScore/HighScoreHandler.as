@@ -61,6 +61,12 @@
 /* to use later
 
 
+var file:File = File.desktopDirectory.resolvePath("MyTextFile.txt");
+var stream:FileStream = new FileStream();
+stream.open(file, FileMode.WRITE);
+stream.writeUTFBytes("This is my text file.");
+stream.close();
+
 
 function doSubmit(e:MouseEvent):void  
 {  
