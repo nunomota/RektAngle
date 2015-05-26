@@ -19,12 +19,12 @@
 		public function DataHandler() {
 			var ldr:URLLoader = new URLLoader();      
 			ldr.load(new URLRequest("http://127.0.0.1/getScores.php"));
-			var result:String = ldr.data;
-			trace(result);  
+			var result:String = ldr.data; 
 			ldr.addEventListener(IOErrorEvent.IO_ERROR, onError);
 
 				 
 			function onError(e:IOErrorEvent):void {
+				GameEngine.debug.print("Error opening URL ".concat(e.target), 3);
 				ldr.load(new URLRequest("scores.txt"));
 
 				ldr.addEventListener(Event.COMPLETE, onLoaded);
