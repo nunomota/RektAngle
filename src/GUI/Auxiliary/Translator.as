@@ -7,8 +7,8 @@
 
 		private var alphabet:String = "abcdefghijklmnopqrstuvwxyz0123456789";
 		
-		public function Translator() {
-			// constructor code
+		public function Translator(engine:GameEngine) {
+			super(engine);
 		}
 		
 		//used to populate the Level's assets
@@ -24,7 +24,7 @@
 			buildAssets();
 		}
 		
-		public static getPixelString(string:String):Array {
+		public function getPixelString(string:String):Array {
 			var array:Array = new Array();
 			var i:int;
 			for (i = 0; i < string.length; i++) {
