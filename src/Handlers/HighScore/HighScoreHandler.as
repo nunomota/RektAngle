@@ -68,6 +68,12 @@ stream.writeUTFBytes("This is my text file.");
 stream.close();
 
 
+
+import stm.mprojector.mSystem;
+
+var computerName:String = mSystem.getComputerName();
+
+
 function doSubmit(e:MouseEvent):void  
 {  
     if(name_txt.length <= 0)  
